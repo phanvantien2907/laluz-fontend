@@ -1,17 +1,13 @@
-# Thư mục node_modules
 node_modules/
 
-# Build files
 .next/
 dist/
 
-# Biến môi trường
 .env
 .env.local
 .env.development
 .env.production
 
-# Thư mục log và cache
 logs/
 npm-debug.log*
 yarn-debug.log*

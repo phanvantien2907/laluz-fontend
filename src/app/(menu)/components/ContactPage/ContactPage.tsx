@@ -36,7 +36,7 @@ const ContactPage = () => {
                 type="text" 
                 placeholder="Nhập họ và tên của bạn" 
                 className="w-full px-6 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#9C8679] focus:border-transparent duration-200"
-              />
+               required/>
             </div>
 
             <div className="mb-4">
@@ -45,7 +45,7 @@ const ContactPage = () => {
                 type="email" 
                 placeholder="Email" 
                 className="w-full px-6 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#9C8679] focus:border-transparent duration-200"
-              />
+             required />
             </div>
 
             <div className="mb-6">
@@ -81,5 +81,5 @@ const ContactPage = () => {
     </div>
   )
 }
-
+  
 export default ContactPage
