@@ -15,6 +15,7 @@ import NuocHoaNuSection from './components/NuocHoaNuSection/NuocHoaNuSection';
 import NuocHoaNamSection from './components/NuocHoaNamSection/NuocHoaNamSection';
 import NuocHoaUniSexSection from './components/NuocHoaUniSexSection/NuocHoaUniSexSection';
 import RelatedProductsSection from './components/RelatedProductsSection/RelatedProductsSection';
+import ContentHome from './components/ContentHome/ContentHome';
 // import { Item } from '@radix-ui/react-dropdown-menu';
 
 
@@ -139,7 +140,7 @@ const Home = () => {
   </Slider>
 </div>
     <hr />
-
+      <ContentHome />
     </div>
   )
 }
