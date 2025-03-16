@@ -1,9 +1,16 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 const AboutPage = () => {
-  // Variants cho các animation
+
+  const [annimation, setAnnimation] = useState(false)
+
+  useEffect(() => {
+    setAnnimation(true);
+  }, []);
+
+
   const fadeIn = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { duration: 0.8 } }
@@ -76,7 +83,7 @@ const AboutPage = () => {
       <motion.div 
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
+        animate={annimation ? { opacity: 2, y: 0 } : {}}
         variants={fadeIn}
         className='space-y-8'>
         
@@ -89,20 +96,8 @@ const AboutPage = () => {
           Đến với LALUZ Parfums, mỗi mùi hương đều là một trải nghiệm độc đáo, khác biệt, mang đến cho bạn sự phong phú và đa dạng trong từng khoảnh khắc. Nếu bạn là một tín đồ mùi hương và đang tìm kiếm một hương thơm phù hợp với cá tính, sở thích cá nhân, hãy ghé ngay LALUZ để đắm chìm trong thế giới nước hoa đầy mê hoặc và quyến rũ.
         </motion.p>
         
-       <motion.div 
-  initial="hidden"
-  whileInView="visible"
-  viewport={{ once: false, amount: 0.2 }} // Cho phép lặp lại hiệu ứng khi cuộn
-  variants={slideFromLeft} 
-  transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}  
-  className='my-12'
->
-  <motion.h2 
-    variants={fadeIn}
-    className='text-2xl md:text-3xl font-semibold text-gray-800 mb-6'
-  > 
-    CEO Chung Thành – Người sáng lập LALUZ Parfums  
-  </motion.h2>
+       <motion.div initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.2 }}variants={slideFromLeft} transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}  className='my-12'>
+      <motion.h2 variants={fadeIn} className='text-2xl md:text-3xl font-semibold text-gray-800 mb-6'> CEO Chung Thành – Người sáng lập LALUZ Parfums </motion.h2>
 
   <div className='flex flex-col md:flex-row md:space-x-8 items-center mb-6'>
     <motion.div  variants={scaleUp} viewport={{ once: false, amount: 0.2 }} className='w-full md:w-1/3 mb-6 md:mb-0'>
