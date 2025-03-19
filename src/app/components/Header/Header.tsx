@@ -13,6 +13,11 @@ import ReponsiveNavbar from '../ReponsiveNavbar/ReponsiveNavbar';
 import { FaTimes } from "react-icons/fa";
 // import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import axios from "axios";
+import {DropdownMenu,DropdownMenuContent,DropdownMenuItem,DropdownMenuLabel,DropdownMenuSeparator,DropdownMenuTrigger,} from "@/components/ui/dropdown-menu"
+import {AlertDialog, AlertDialogAction,AlertDialogCancel,AlertDialogContent,AlertDialogDescription, AlertDialogFooter,AlertDialogHeader,AlertDialogTitle,AlertDialogTrigger,} from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import AccountPage from '@/app/(auth)/account/page';
 
 interface menuItem {
   id: string;
@@ -24,12 +29,35 @@ const  Header = () => {
 
   const [menuData, setMenuData] = useState<menuItem[]>([]);
   const [open, setOpen] = useState(false)
-  
+  const [isLogin, setIsLogin] = useState(false)
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const router = useRouter();
+
+  const handleLogout = () =>  {
+    localStorage.removeItem("token");
+    setIsLogin(false);
+    router.push("/login");
+  }
+
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLogin(!!token);
+    if(!token) {
+      router.push("/login")
+    }
+    
+    const storedEmail = localStorage.getItem("email") || "";
+    setEmail(storedEmail);
+
+    const convertUser = storedEmail.split("@")[0].toLowerCase();
+    setUsername(convertUser);
+
     axios.get('http://127.0.0.1:8000/api/menu')
-      .then((res) => setMenuData(res.data.data))
-      .catch((err) => console.error("Lỗi gọi API:", err));
+    .then((res) => setMenuData(res.data.data))
+    .catch((err) => console.error("Lỗi gọi API:", err));
   }, []);
+  
 
   return (
 
@@ -76,13 +104,47 @@ const  Header = () => {
       <Link href="/search"><MdSearch className=' hover:text-[#9C8679] duration-200 transform transition-transform group-hover:-translate-y-1' /></Link>
       </div>
     <div className="relative group">
-  <FaShoppingCart className="transform transition-transform group-hover:-translate-y-1" />
-  <span className="absolute transform transition-transform group-hover:-translate-y-1 -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
-</div>
+    <FaShoppingCart className="transform transition-transform group-hover:-translate-y-1" />
+    <span className="absolute transform transition-transform group-hover:-translate-y-1 -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+  </div>
       
     <div className="relative group">
-    <Link href="/login"><FaUserCircle className='hidden md:block hover:text-[#9C8679] duration-200 transform transition-transform group-hover:-translate-y-1' /></Link>
+    {isLogin ? (
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <FaUserCircle className="text-2xl md:block hover:text-[#9C8679] duration-200 transform transition-transform group-hover:-translate-y-1 cursor-pointer" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel className='cursor-pointer'>{username ? `Xin chào, ${username}` : "Xin chào, Khách"}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className='cursor-pointer'><Link href={'/account'}>Tài khoản của tôi</Link></DropdownMenuItem>
+            <DropdownMenuItem className='cursor-pointer'><Link href={'/account/orders'}>Lịch sử đơn hàng</Link></DropdownMenuItem>
+            <DropdownMenuItem className='cursor-pointer'><Link href={'/account/change-password'}>Thay đổi mật khẩu</Link></DropdownMenuItem>
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              <AlertDialog>
+              <AlertDialogTrigger asChild>
+               <span className='cursor-pointer'>Đăng xuất</span>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Bạn chắc chắn muốn đăng xuất ?</AlertDialogTitle>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleLogout}>Continue</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+             </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ) : (
+        <Link href="/login">
+          <FaUserCircle className="text-2xl hidden md:block hover:text-[#9C8679] duration-200 transform transition-transform group-hover:-translate-y-1" />
+        </Link>
+      )}
     </div>
+
     </div>
      </div>
 
