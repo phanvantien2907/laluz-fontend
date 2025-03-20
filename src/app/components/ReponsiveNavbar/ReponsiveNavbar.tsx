@@ -1,19 +1,30 @@
 "use client";
 import React from 'react'
+import { useState, useEffect } from 'react';
 import { FaHeart } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaUserCircle } from "react-icons/fa";
 import Link from 'next/link';
+import { useRouter } from "next/navigation";
+import {AlertDialog, AlertDialogAction,AlertDialogCancel,AlertDialogContent,AlertDialogDescription, AlertDialogFooter,AlertDialogHeader,AlertDialogTitle,AlertDialogTrigger,} from "@/components/ui/alert-dialog"
+import { IoLogOut } from "react-icons/io5";
 
-const ReponsiveNavbar  = () => {
+
+
+const ReponsiveNavbar  = ({onLogout, isLogin,email, username}: {
+  onLogout: () => void;
+  isLogin: boolean;
+  email: string;
+  username: string;
+}) => {
+
   return (
     <div className='bg-[#9C8679] text-black p-3 rounded-3xl md:hidden animate-pulse'>
       <div className="relative w-full max-w-full">
   <input
     type="text"
     placeholder="Tìm kiếm sản phẩm của bạn.."
-    className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-  />
+    className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
   <button
     className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
     type="button"
@@ -44,9 +55,21 @@ const ReponsiveNavbar  = () => {
           <Link href="/cart">Giỏ hàng </Link>
         </div>
         <div className='flex gap-3 items-center py-2 border-t border-white'>
-        <FaUserCircle/>
-        <Link href="/auth/login">Đăng nhập </Link> /
-        <Link href="/auth/register">Đăng ký </Link>
+          {isLogin ? 
+          (
+            <>
+            <FaUserCircle />
+            <Link href={'/profile'}>Tài khoản của tôi</Link>
+            </>
+          ): (
+            <>
+            <FaUserCircle />
+            <Link href="/login">Đăng nhập</Link>
+            /
+            <Link href="/register">Đăng ký</Link>
+          </>
+          ) }
+       
         </div>
         <div className='flex gap-3 items-center py-2 border-t border-white'>
         <FaHeart/>
@@ -64,6 +87,30 @@ const ReponsiveNavbar  = () => {
         <div className='flex gap-3 items-center py-2 border-t border-white'>
         <Link href="/nuoc-hoa">Nước hoa</Link>
         </div>
+          {isLogin && 
+          (
+          <div className='flex gap-3 items-center py-2 border-t border-white'>
+          <AlertDialog>
+         <AlertDialogTrigger asChild>
+          <div className='flex gap-2 items-center cursor-pointer'>
+          <IoLogOut className='text-2xl' />
+          <span> Đăng xuất</span>
+          </div>
+           </AlertDialogTrigger>
+          <AlertDialogContent>
+          <AlertDialogHeader>
+          <AlertDialogTitle>Bạn chắc chắn muốn đăng xuất ?</AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+         <AlertDialogCancel>Cancel</AlertDialogCancel>
+         <AlertDialogAction onClick={onLogout}>Continue</AlertDialogAction>
+        </AlertDialogFooter>
+         </AlertDialogContent>
+        </AlertDialog>
+        </div>
+      )}
+         
+        
     </div>
 
     </div>

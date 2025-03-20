@@ -17,7 +17,9 @@ import {DropdownMenu,DropdownMenuContent,DropdownMenuItem,DropdownMenuLabel,Drop
 import {AlertDialog, AlertDialogAction,AlertDialogCancel,AlertDialogContent,AlertDialogDescription, AlertDialogFooter,AlertDialogHeader,AlertDialogTitle,AlertDialogTrigger,} from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import AccountPage from '@/app/(auth)/account/page';
+import ProfilePage from '@/app/(auth)/profile/page';
+import { toast } from "react-hot-toast";
+
 
 interface menuItem {
   id: string;
@@ -35,23 +37,39 @@ const  Header = () => {
   const router = useRouter();
 
   const handleLogout = () =>  {
-    localStorage.removeItem("token");
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("email");
+    localStorage.removeItem("expires_in");
     setIsLogin(false);
     router.push("/login");
+    toast.success("Đăng xuất thành công");
   }
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLogin(!!token);
-    if(!token) {
-      router.push("/login")
+    const access_token = localStorage.getItem("access_token");
+    const expires_in = localStorage.getItem("expires_in");
+    setIsLogin(!!access_token);
+    if(!localStorage.getItem("access_token") && window.location.pathname !== "/") {   
+     router.replace("/login");
+      return;
     }
+ 
     
     const storedEmail = localStorage.getItem("email") || "";
     setEmail(storedEmail);
-
     const convertUser = storedEmail.split("@")[0].toLowerCase();
     setUsername(convertUser);
+
+
+    if(access_token && expires_in && Date.now() > parseInt(expires_in)) {
+      toast.error("Phiên đăng nhập hết hạn, vui lòng đăng nhập lại!");
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("email");
+      localStorage.removeItem("expires_in");
+      router.replace("/login");
+      return;
+    }
+
 
     axios.get('http://127.0.0.1:8000/api/menu')
     .then((res) => setMenuData(res.data.data))
@@ -69,7 +87,7 @@ const  Header = () => {
          <FaBars className='block md:hidden text-xl hover:duration-200 transform transition-transform group-hover:-translate-y-1 cursor-pointer' onClick={() => setOpen(!open)} />
      }
      </div>
-     <Image src="/image/cropped-logo-laluz-new.jpg" alt='logo' width={100} height={100} />
+     <Image src="/image/slide/cropped-logo-laluz-new.jpg" alt='logo' width={100} height={100} />
      <div className="relative w-full max-w-md hidden md:block">
   <input
     type="text"
@@ -117,9 +135,9 @@ const  Header = () => {
           <DropdownMenuContent>
             <DropdownMenuLabel className='cursor-pointer'>{username ? `Xin chào, ${username}` : "Xin chào, Khách"}</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className='cursor-pointer'><Link href={'/account'}>Tài khoản của tôi</Link></DropdownMenuItem>
-            <DropdownMenuItem className='cursor-pointer'><Link href={'/account/orders'}>Lịch sử đơn hàng</Link></DropdownMenuItem>
-            <DropdownMenuItem className='cursor-pointer'><Link href={'/account/change-password'}>Thay đổi mật khẩu</Link></DropdownMenuItem>
+            <DropdownMenuItem className='cursor-pointer'><Link href={'/profile'}>Tài khoản của tôi</Link></DropdownMenuItem>
+            <DropdownMenuItem className='cursor-pointer'><Link href={'/profile/orders'}>Lịch sử đơn hàng</Link></DropdownMenuItem>
+            <DropdownMenuItem className='cursor-pointer'><Link href={'/profile/change-password'}>Thay đổi mật khẩu</Link></DropdownMenuItem>
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               <AlertDialog>
               <AlertDialogTrigger asChild>
@@ -155,7 +173,7 @@ const  Header = () => {
     )
   )}
     </div>
-    {open && <ReponsiveNavbar />}
+    {open && <ReponsiveNavbar onLogout={handleLogout} isLogin={isLogin} email={email} username={username} />}
     </div>
   )
 }

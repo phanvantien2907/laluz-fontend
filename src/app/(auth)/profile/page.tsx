@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AccountPage = () => {
+const ProfilePage = () => {
   return (
     <div>
       <h1>đây là tài khoản của tôi</h1>
@@ -8,4 +8,4 @@ const AccountPage = () => {
   )
 }
 
-export default AccountPage
+export default ProfilePage

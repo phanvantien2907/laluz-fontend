@@ -24,6 +24,7 @@ const LoginPage = () => {
       });
       localStorage.setItem("access_token", res.data.access_token);
       localStorage.setItem("email", email);
+      localStorage.setItem("expires_in", (Date.now() + 3600 * 1000).toString());
       toast.success("Đăng nhập thành công!")
       setTimeout(() => {
         location.assign("/");
