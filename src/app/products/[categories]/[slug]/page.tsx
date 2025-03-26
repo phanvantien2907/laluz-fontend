@@ -37,7 +37,8 @@ const ProductPage: React.FC<ProductPageProps> = () => {
   const [data, setData] = useState([]);
   
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/product')
+    axios
+      .get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/product`)
       .then((res) => setData(res.data.data))
       .catch((err) => console.error("Lỗi gọi API:", err));
   }, []);

@@ -17,7 +17,7 @@ const Menupage = () => {
     const {slug} = useParams()
 
     useEffect(() => {
-      axios.get('http://127.0.0.1:8000/api/menu')
+      axios.get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/menu`)
         .then((res) => setMenuData(res.data.data))
         .catch((err) => console.error("Lỗi gọi API:", err));
     }, []);

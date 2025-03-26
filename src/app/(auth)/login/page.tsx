@@ -18,7 +18,7 @@ const LoginPage = () => {
   const handleLogin = async () => {
     setError("");
     try {
-      const res = await axios.post("http://127.0.0.1:8000/api/auth/login", {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_API}/api/auth/login`, {
         email,
         password,
       });

@@ -17,7 +17,7 @@ const RegisterPage = () => {
   const handleRegister = async () => {
     setError("");
     try {
-      const res = await axios.post("http://127.0.0.1:8000/api/auth/register", {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_API}/api/auth/register`, {
         email,
         password,
         password_confirmation: password,
