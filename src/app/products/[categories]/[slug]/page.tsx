@@ -56,24 +56,24 @@ const ProductPage = () => {
   return (
     <div className='bg-gray-50'>
       <div className='border-t border-gray-200'>
-        <CustomBreadcrumb />
+        <CustomBreadcrumb />``
         <div className='container mx-auto px-4 py-8 max-w-7xl'>
           {/* Product details section */}
           <div className="flex flex-col lg:flex-row gap-8 mb-12">
             {/* Product image */}
             <div className='w-full lg:w-1/2'>
-  <div className='bg-white rounded-2xl p-6 shadow-sm'>
-    <div className='relative h-[500px] w-full overflow-hidden group'>
-      <Image 
-        src={dataNuocHoaNam[0].image} 
-        layout='fill' 
-        objectFit='contain' 
-        alt='Product image'
-        className='transition-transform duration-300 group-hover:scale-150'
-      />
-    </div>
-  </div>
-</div>
+         <div className='bg-white rounded-2xl p-6 shadow-sm'>
+          <div className='relative h-[500px] w-full overflow-hidden group'>
+            <Image 
+              src={dataNuocHoaNam[0].image} 
+              layout='fill' 
+              objectFit='contain' 
+              alt='Product image'
+              className='transition-transform duration-300 group-hover:scale-150'
+            />
+          </div>
+        </div>
+      </div>
             
             {/* Product information */}
             <div className='w-full lg:w-1/2'>
