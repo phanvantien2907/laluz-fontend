@@ -31,7 +31,7 @@ interface BenefitItem {
 }
 
 const ProductPage: React.FC<ProductPageProps> = () => {  
-  const resolvedParams  = useParams();
+  const resolvedParams = useParams<{ category: string; slug: string }>();
   const product = dataNuocHoaNam.find((p) => p.alias === resolvedParams .slug);
   
   const [data, setData] = useState([]);
