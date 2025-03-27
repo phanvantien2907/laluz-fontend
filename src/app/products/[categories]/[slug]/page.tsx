@@ -13,12 +13,7 @@ import RelatedProductsSection from '@/app/components/RelatedProductsSection/Rela
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-interface ProductPageProps {
-  params: {
-    category: string;
-    slug: string;
-  };
-}
+
 
 interface ProductInfoItem {
   icon: string;
@@ -30,8 +25,8 @@ interface BenefitItem {
   text: string;
 }
 
-const ProductPage: React.FC<ProductPageProps> = () => {  
-  const resolvedParams = useParams<{ category: string; slug: string }>();
+const ProductPage = () => {  
+  const resolvedParams = useParams<{ categories: string; slug: string }>();
   const product = dataNuocHoaNam.find((p) => p.alias === resolvedParams .slug);
   
   const [data, setData] = useState([]);
