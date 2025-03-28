@@ -24,7 +24,7 @@ interface BenefitItem {
   icon: string;
   text: string;
 }
-
+  
 const ProductPage = () => {  
   const resolvedParams = useParams<{ categories: string; slug: string }>();
   const product = dataNuocHoaNam.find((p) => p.alias === resolvedParams .slug);
@@ -56,7 +56,7 @@ const ProductPage = () => {
   return (
     <div className='bg-gray-50'>
       <div className='border-t border-gray-200'>
-        <CustomBreadcrumb />``
+        <CustomBreadcrumb />
         <div className='container mx-auto px-4 py-8 max-w-7xl'>
           {/* Product details section */}
           <div className="flex flex-col lg:flex-row gap-8 mb-12">
@@ -104,16 +104,12 @@ const ProductPage = () => {
                   <p className='text-gray-700 font-medium mb-2'>Dung tích</p>
                   <div className='flex gap-3'>
                     <button 
-                      type="button"
-                      className='px-4 py-2 border-2 border-[#9C8679] text-[#9C8679] font-medium rounded-lg hover:bg-[#9C8679] hover:text-white transition-colors duration-200'
-                    >
-                      50ML
+                    type="button"
+                      className='px-4 py-2 border-2 border-[#9C8679] text-[#9C8679] font-medium rounded-lg hover:bg-[#9C8679] hover:text-white transition-colors duration-200' >  50ML
                     </button>
                     <button 
                       type="button"
-                      className='px-4 py-2 border-2 border-gray-300 text-gray-500 font-medium rounded-lg hover:border-[#9C8679] hover:text-[#9C8679] transition-colors duration-200'
-                    >
-                      100ML
+                      className='px-4 py-2 border-2 border-gray-300 text-gray-500 font-medium rounded-lg hover:border-[#9C8679] hover:text-[#9C8679] transition-colors duration-200'>100ML
                     </button>
                   </div>
                 </div>
@@ -126,13 +122,10 @@ const ProductPage = () => {
                 <div className='flex flex-col sm:flex-row gap-4 mb-8'>
                   <button 
                     type="button"
-                    className='bg-[#9C8679] text-white px-6 py-3 rounded-xl font-semibold flex-1 hover:bg-[#8a7569] transition-colors duration-200 flex items-center justify-center gap-2'
-                  >
+                    className='bg-[#9C8679] text-white px-6 py-3 rounded-xl font-semibold flex-1 hover:bg-[#8a7569] transition-colors duration-200 flex items-center justify-center gap-2' >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                       <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3z" />
-                    </svg>
-                    Thêm vào giỏ hàng
-                  </button>
+                    </svg>Thêm vào giỏ hàng </button>
                   <button 
                     type="button"
                     className='bg-[#C96F3B] text-white px-6 py-3 rounded-xl font-semibold flex-1 hover:bg-[#b65f2f] transition-colors duration-200 flex items-center justify-center gap-2'>

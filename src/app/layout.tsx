@@ -7,7 +7,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Head from "next/head";
 import { Toaster } from "react-hot-toast";
-
+import { AuthProvider } from "../../context/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,11 +32,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`} >
+        <AuthProvider>
           <Header />
           <Toaster position="top-right" reverseOrder={false} />
-        {children}
-        <Footer />  
+          {children}
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

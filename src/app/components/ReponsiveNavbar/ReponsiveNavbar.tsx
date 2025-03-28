@@ -8,15 +8,13 @@ import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import {AlertDialog, AlertDialogAction,AlertDialogCancel,AlertDialogContent,AlertDialogDescription, AlertDialogFooter,AlertDialogHeader,AlertDialogTitle,AlertDialogTrigger,} from "@/components/ui/alert-dialog"
 import { IoLogOut } from "react-icons/io5";
+import { useAuth } from '../../../../context/AuthContext';
 
 
+const ReponsiveNavbar = () => {
+  const {isLogin} = useAuth();
+  const { logout } = useAuth();
 
-const ReponsiveNavbar  = ({onLogout, isLogin,email, username}: {
-  onLogout: () => void;
-  isLogin: boolean;
-  email: string;
-  username: string;
-}) => {
 
   return (
     <div className='bg-[#9C8679] text-black p-3 rounded-3xl md:hidden animate-pulse'>
@@ -102,8 +100,8 @@ const ReponsiveNavbar  = ({onLogout, isLogin,email, username}: {
           <AlertDialogTitle>Bạn chắc chắn muốn đăng xuất ?</AlertDialogTitle>
           </AlertDialogHeader>
           <AlertDialogFooter>
-         <AlertDialogCancel>Cancel</AlertDialogCancel>
-         <AlertDialogAction onClick={onLogout}>Continue</AlertDialogAction>
+         <AlertDialogCancel>Hủy</AlertDialogCancel>
+         <AlertDialogAction onClick={logout}>Xác nhận</AlertDialogAction>
         </AlertDialogFooter>
          </AlertDialogContent>
         </AlertDialog>

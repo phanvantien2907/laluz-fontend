@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import ProfilePage from '@/app/(auth)/profile/page';
 import { toast } from "react-hot-toast";
-
+import { useAuth } from '../../../../context/AuthContext';
 
 interface menuItem {
   id: string;
@@ -35,21 +35,21 @@ const  Header = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const router = useRouter();
-
-  const handleLogout = () =>  {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("email");
-    localStorage.removeItem("expires_in");
-    setIsLogin(false);
-    router.push("/login");
-    toast.success("Đăng xuất thành công");
-  }
+  const { logout } = useAuth();
 
   useEffect(() => {
     const access_token = localStorage.getItem("access_token");
     const expires_in = localStorage.getItem("expires_in");
     setIsLogin(!!access_token);
-    if(!localStorage.getItem("access_token") && window.location.pathname !== "/") {   
+    // các route cần được bảo vệ
+    const protectedRoutes = [  "/profile",  "/profile/orders", "/profile/change-password" ];
+    const currentPath = window.location.pathname;
+    // kiểm tra xem đường dẫn hiện tại có nằm trong danh sách các route được bảo vệ hay không
+    const isProtectedRoute = protectedRoutes.some(
+      (route) => currentPath === route || currentPath.startsWith(`${route}/`)
+    ); 
+
+    if(!access_token && isProtectedRoute) {   
      router.replace("/login");
       return;
     }
@@ -73,7 +73,7 @@ const  Header = () => {
 
     axios
       .get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/menu`)
-      .then((res) => setMenuData(res.data.data.data))
+      .then((res) => setMenuData(res.data.data))
       .catch((err) => console.error("Lỗi gọi API:", err));
   }, []);
   
@@ -149,8 +149,8 @@ const  Header = () => {
                   <AlertDialogTitle>Bạn chắc chắn muốn đăng xuất ?</AlertDialogTitle>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleLogout}>Continue</AlertDialogAction>
+                  <AlertDialogCancel>Hủy</AlertDialogCancel>
+                  <AlertDialogAction onClick={logout}>Xác nhận</AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
@@ -174,7 +174,7 @@ const  Header = () => {
     )
   )}
     </div>
-    {open && <ReponsiveNavbar onLogout={handleLogout} isLogin={isLogin} email={email} username={username} />}
+    {open && <ReponsiveNavbar />}
     </div>
   )
 }

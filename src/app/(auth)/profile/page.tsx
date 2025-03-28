@@ -14,24 +14,27 @@ import { cn } from "@/lib/utils"
 import { FaCircleUser } from "react-icons/fa6"
 import { FaSignOutAlt } from "react-icons/fa"
 import { Calendar } from "@/components/ui/calendar";
+import { useAuth } from '../../../../context/AuthContext'
+import { AlertDialog, AlertDialogAction,AlertDialogCancel,AlertDialogContent,AlertDialogDescription, AlertDialogFooter, AlertDialogHeader,AlertDialogTitle,AlertDialogTrigger,} from "@/components/ui/alert-dialog";
 
 
 const ProfilePage = () => {
-  const [avatar, setAvatar] = useState<string | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [avatar, setAvatar] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [date, setDate] = React.useState<Date | undefined>(new Date());
+  const { logout } = useAuth();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file)
-      setAvatar(imageUrl)
+      const imageUrl = URL.createObjectURL(file);
+      setAvatar(imageUrl);
     }
-  }
+  };
 
   const triggerFileInput = () => {
-    fileInputRef.current?.click()
-  }
+    fileInputRef.current?.click();
+  };
 
   return (
     <div className="container py-8 max-w-6xl mx-auto">
@@ -88,14 +91,29 @@ const ProfilePage = () => {
                 href="/profile/change-password"
                 className="text-gray-700 hover:text-[#9C8679] transition-colors py-2 px-4 rounded-lg hover:bg-[#9C8679]/10"
               >
+                {" "}
                 Thay đổi mật khẩu
               </Link>
-              <Button className="group relative mt-4 bg-[#9C8679] hover:bg-[#8B7868] text-white rounded-xl w-full overflow-hidden transition duration-300">
-                <span className="relative z-10 flex items-center justify-center group-hover:text-[#9C8679] transition-colors duration-300">
-                  <FaSignOutAlt className="mr-2" /> Đăng xuất
-                </span>
-                <span className="absolute inset-x-0 bottom-0 h-0 bg-white group-hover:h-full transition-all duration-300 ease-out z-0"></span>
-              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button className="group relative mt-4 bg-[#9C8679] hover:bg-[#8B7868] text-white rounded-xl w-full overflow-hidden transition duration-300">
+                    <span className="relative z-10 flex items-center justify-center group-hover:text-[#9C8679] transition-colors duration-300">
+                      <FaSignOutAlt className="mr-2" /> Đăng xuất
+                    </span>
+                    <span className="absolute inset-x-0 bottom-0 h-0 bg-white group-hover:h-full transition-all duration-300 ease-out z-0"></span>
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle> Bạn chắc chắn muốn đăng xuất?
+                    </AlertDialogTitle>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Hủy</AlertDialogCancel>
+                    <AlertDialogAction onClick={logout}>Xác nhận</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </CardContent>
         </Card>
@@ -125,10 +143,18 @@ const ProfilePage = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="birthdate" className="font-bold hover:cursor-pointer" >Ngày sinh</Label>
+                  <Label
+                    htmlFor="birthdate"
+                    className="font-bold hover:cursor-pointer"
+                  >
+                    Ngày sinh
+                  </Label>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button variant="outline"  className="w-full rounded-full px-6 justify-start text-left font-normal">
+                      <Button
+                        variant="outline"
+                        className="w-full rounded-full px-6 justify-start text-left font-normal"
+                      >
                         {date ? (
                           format(date, "dd/MM/yyyy", { locale: vi })
                         ) : (
@@ -138,7 +164,12 @@ const ProfilePage = () => {
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar mode="single" selected={date}  onSelect={setDate} className="rounded-md border" />
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        className="rounded-md border"
+                      />
                     </PopoverContent>
                   </Popover>
                 </div>
@@ -189,6 +220,6 @@ const ProfilePage = () => {
       </div>
     </div>
   );
-}
+};
 
 export default ProfilePage
