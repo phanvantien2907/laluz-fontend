@@ -5,18 +5,15 @@ import Image from 'next/image';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Link from 'next/link';
-import { dataNuocHoaNam, tai_sao_chon_laluz_parfums, dataNuocHoaNu, dataNuocHoaUniSex,stuDio } from './mockdata';
+import { tai_sao_chon_laluz_parfums,stuDio } from './mockdata';
 import { motion } from "framer-motion";
 import { div } from 'framer-motion/client';
-import axios from "axios";
-import { useEffect, useState } from "react";
 import NuocHoaNuSection from './components/NuocHoaNuSection/NuocHoaNuSection';
 import NuocHoaNamSection from './components/NuocHoaNamSection/NuocHoaNamSection';
 import NuocHoaUniSexSection from './components/NuocHoaUniSexSection/NuocHoaUniSexSection';
-import RelatedProductsSection from './components/RelatedProductsSection/RelatedProductsSection';
 import ContentHome from './components/ContentHome/ContentHome';
 // import { Item } from '@radix-ui/react-dropdown-menu';
+import { useAuth } from '../../context/AuthContext';
 
 
 const images = [
@@ -30,15 +27,8 @@ const images = [
 
 const Home = () => {
 
-  const [data, setData] = useState([]);
+  const {data} = useAuth();
   
-  useEffect(() => {
-    axios
-      .get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/product`)
-      .then((res) => setData(res.data.data))
-      .catch((err) => console.error("Lỗi gọi API:", err));
-  }, []);
-
   const settings = {
     dots: true,
     infinite: true,

@@ -10,8 +10,7 @@ import { FaPhoneAlt } from "react-icons/fa";
 import Link from 'next/link';
 import ButtonSetQuantity from '@/app/components/ButtonSetQuantity/ButtonSetQuantity';
 import RelatedProductsSection from '@/app/components/RelatedProductsSection/RelatedProductsSection';
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useAuth } from '../../../../../context/AuthContext';
 
 
 
@@ -25,18 +24,19 @@ interface BenefitItem {
   text: string;
 }
   
-const ProductPage = () => {  
-  const resolvedParams = useParams<{ categories: string; slug: string }>();
-  const product = dataNuocHoaNam.find((p) => p.alias === resolvedParams .slug);
+  const ProductPage = () => { 
+  const { data } = useAuth(); 
+  const resolvedParams = useParams<{ categories: string; alias: string }>();
+  if(!data || data.length === 0 ) {
+    return <div className='text-center'>Loading...</div>;
+
+  }
+  const product = data.find((p) => p.alias === resolvedParams .alias);
   
-  const [data, setData] = useState([]);
-  
-  useEffect(() => {
-    axios
-      .get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/product`)
-      .then((res) => setData(res.data.data))
-      .catch((err) => console.error("Lỗi gọi API:", err));
-  }, []);
+  if(!product) {
+    return <div className='text-center'>Sản phẩm không tồn tại</div>;
+  }
+ 
 
   const productInfoItems: ProductInfoItem[] = [
     { icon: "/image/icon/ic-info-1.jpg", text: "Thương hiệu: Gritt" },
@@ -65,12 +65,11 @@ const ProductPage = () => {
          <div className='bg-white rounded-2xl p-6 shadow-sm'>
           <div className='relative h-[500px] w-full overflow-hidden group'>
             <Image 
-              src={dataNuocHoaNam[0].image} 
+              src={product.image} 
               layout='fill' 
               objectFit='contain' 
-              alt='Product image'
-              className='transition-transform duration-300 group-hover:scale-150'
-            />
+              alt={product.name}
+              className='transition-transform duration-300 group-hover:scale-150'/>
           </div>
         </div>
       </div>
@@ -78,7 +77,7 @@ const ProductPage = () => {
             {/* Product information */}
             <div className='w-full lg:w-1/2'>
               <div className='bg-white rounded-2xl p-8 shadow-sm h-full'>
-                <h1 className='text-3xl font-bold text-gray-800 mb-3'>{dataNuocHoaNam[0].name}</h1>
+                <h1 className='text-3xl font-bold text-gray-800 mb-3'>{product.name}</h1>
                 
                 <div className='flex items-center gap-2 mb-3'>
                   <div className='flex text-amber-400'>
@@ -97,7 +96,7 @@ const ProductPage = () => {
                 </div>
                 
                 <div className='mb-6'>
-                  <p className='text-3xl font-bold text-red-500'>{dataNuocHoaNam[0].price}</p>
+                  <p className='text-3xl font-bold text-red-500'>{product.price.replace(/\./g, ',')} đ</p>
                 </div>
                 
                 <div className='mb-6'>
@@ -166,7 +165,7 @@ const ProductPage = () => {
               ))}
             </div>
             
-            {/* Description */}
+            {/* Description */} 
             <div className='bg-white rounded-2xl p-6 shadow-sm'>
               <h3 className='text-xl font-bold text-gray-800 mb-4'>Mô tả sản phẩm</h3>
               <p className='text-gray-600 leading-relaxed'>
@@ -203,7 +202,7 @@ const ProductPage = () => {
           </div>
           
           {/* Related products section */}
-         <RelatedProductsSection products={data} />
+         <RelatedProductsSection products={data} /> 
         </div>
       </div>
     </div>

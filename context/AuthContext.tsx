@@ -1,19 +1,34 @@
 "use client";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import axios from "axios";
 
 interface AuthContextType {
   isLogin: boolean;
   logout: () => void;
+  data: any[];
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
-  const [isLogin, setIsLogin] = useState( !!localStorage.getItem("access_token")
-  );
+  const [isLogin, setIsLogin] = useState(false);
+  const [data, setData] = useState([]);
+
+    useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    setIsLogin(!!token);}, []);
+
+ 
+  
+  useEffect(() => {
+    axios
+      .get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/product`)
+      .then((res) => setData(res.data.data))
+      .catch((err) => console.error("Lỗi gọi API:", err));
+  }, []);
 
    const handleLogout = () =>  {
       localStorage.removeItem("access_token");
@@ -25,7 +40,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
   return (
-    <AuthContext.Provider value={{ isLogin, logout: handleLogout }}>
+    <AuthContext.Provider value={{ isLogin, logout: handleLogout, data }}>
       {children}
     </AuthContext.Provider>
   );

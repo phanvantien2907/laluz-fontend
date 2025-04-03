@@ -24,12 +24,14 @@ const CustomBreadcrumb = () => {
         const href = "/" + pathParts.slice(0, index + 1).join("/");
 
         return (
-          <BreadcrumbItem key={index} className='text-[#C96F3B]'>
+          <React.Fragment key={index}>
             <BreadcrumbSeparator />
-            <BreadcrumbLink asChild>
-              <Link href={href}>{decodeURIComponent(part)}</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
+            <BreadcrumbItem className="text-[#C96F3B]">
+              <BreadcrumbLink asChild>
+                <Link href={href}>{decodeURIComponent(part)}</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          </React.Fragment>
         );
       })}
     </BreadcrumbList>

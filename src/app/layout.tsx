@@ -8,6 +8,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Head from "next/head";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "../../context/AuthContext";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,13 +33,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`} >
-        <AuthProvider>
-          <Header />
-          <Toaster position="top-right" reverseOrder={false} />
-          {children}
-          <Footer />
-        </AuthProvider>
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <Suspense fallback={<div className="text-center text-2xl">Loading...</div>}>
+          <AuthProvider>
+            <Header />
+            <Toaster position="top-right" reverseOrder={false} />
+            {children}
+            <Footer />
+          </AuthProvider>
+        </Suspense>
       </body>
     </html>
   );

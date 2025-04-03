@@ -6,6 +6,7 @@ import AboutPage from '../components/AboutPage/AboutPage';
 import axios from "axios";
 import { useState, useEffect } from 'react';
 
+
 interface menuItem {
   id: string;
   name: string;
@@ -36,10 +37,10 @@ const Menupage = () => {
 
   return (
     <div>
-    <CustomBreadcrumb />
-    {renderMenu()}
+      <CustomBreadcrumb />
+      {renderMenu()}
     </div>
-  )
+  );
 }
 
 export default Menupage
