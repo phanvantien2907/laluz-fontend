@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "@/app/globals.css";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Head from "next/head";
-import { AuthProvider } from "../../context/AuthContext";
+import { Toaster } from "react-hot-toast";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,9 +32,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <AuthProvider>
-          {children}
-          </AuthProvider>
+        <Suspense
+          fallback={<div className="text-center text-2xl">Loading...</div>}>
+            <Header />
+            <Toaster position="top-right" reverseOrder={false} />
+            {children}
+            <Footer />
+        </Suspense>
       </body>
     </html>
   );
