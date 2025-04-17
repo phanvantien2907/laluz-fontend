@@ -9,12 +9,12 @@ import { useRouter } from "next/navigation";
 import {AlertDialog, AlertDialogAction,AlertDialogCancel,AlertDialogContent,AlertDialogDescription, AlertDialogFooter,AlertDialogHeader,AlertDialogTitle,AlertDialogTrigger,} from "@/components/ui/alert-dialog"
 import { IoLogOut } from "react-icons/io5";
 import { useAuth } from '../../../../../context/AuthContext';
-
+import { useCart } from '../../../../../context/CartContext';
 
 const ReponsiveNavbar = () => {
   const {isLogin} = useAuth();
   const { logout } = useAuth();
-
+  const {totalQuantity} = useCart();
 
   return (
     <div className='bg-[#9C8679] text-black p-3 rounded-3xl md:hidden animate-pulse'>
@@ -25,15 +25,13 @@ const ReponsiveNavbar = () => {
     className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
   <button
     className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-    type="button"
-  >
+    type="button">
     <svg
       className="w-5 h-5"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+      xmlns="http://www.w3.org/2000/svg">
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -48,7 +46,7 @@ const ReponsiveNavbar = () => {
         <div className='flex gap-3 items-center py-2'>
           <div className="relative">
             <FaShoppingCart />
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{totalQuantity}</span>
           </div>
           <Link href="/cart">Giỏ hàng </Link>
         </div>
@@ -97,7 +95,7 @@ const ReponsiveNavbar = () => {
            </AlertDialogTrigger>
           <AlertDialogContent>
           <AlertDialogHeader>
-          <AlertDialogTitle>Bạn chắc chắn muốn đăng xuất ?</AlertDialogTitle>
+          <AlertDialogTitle className='bg-black'>Bạn chắc chắn muốn đăng xuất ?</AlertDialogTitle>
           </AlertDialogHeader>
           <AlertDialogFooter>
          <AlertDialogCancel>Hủy</AlertDialogCancel>

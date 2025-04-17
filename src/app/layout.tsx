@@ -5,6 +5,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Head from "next/head";
 import { AuthProvider } from "../../context/AuthContext";
+import { Car } from "lucide-react";
+import { CartProvider } from "../../context/CartContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,10 +30,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`} >
         <AuthProvider>
-          {children}
-          </AuthProvider>
+          <CartProvider>
+            {children}
+            </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

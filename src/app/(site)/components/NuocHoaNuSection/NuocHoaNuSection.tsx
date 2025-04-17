@@ -60,7 +60,7 @@ const NuocHoaNuSection: React.FC<SectionProps> = ({ products }) => {
                             <img src={item.image} alt={item.name} className="w-24 h-32 mx-auto object-contain hover:scale-125 transition-transform" />
                             <p className="text-sm mt-2 border-b border-black uppercase">{item.alias}</p>
                             <h6 className="font-bold text-lg mt-1 text-wrap">{item.name}</h6>
-                            <p className="text-sm font-bold mt-1">{item.price} đ</p>
+                            <p className="text-sm font-bold mt-1">{item.price.replace(/\./g, ',')} đ</p>
                             </Link>
                         </div>
                     ))}

@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { useParams } from 'next/navigation';
 import CustomBreadcrumb from '@/app/(site)/components/CustomBreadcrumb/CustomBreadcrumb';
 import Image from 'next/image';
@@ -10,12 +10,11 @@ import Link from 'next/link';
 import ButtonSetQuantity from '@/app/(site)/components/ButtonSetQuantity/ButtonSetQuantity';
 import RelatedProductsSection from '@/app/(site)/components/RelatedProductsSection/RelatedProductsSection';
 import { useAuth } from '../../../../../../context/AuthContext';
+import { CartItem, useCart } from '../../../../../../context/CartContext';
+import { toast } from 'react-hot-toast';
+import { useRouter } from "next/navigation";
+import { se } from 'date-fns/locale';
 
-
-interface ProductInfoItem {
-  icon: string;
-  text: string;
-}
 
 interface BenefitItem {
   icon: string;
@@ -23,7 +22,35 @@ interface BenefitItem {
 }
   
   const ProductPage = () => { 
-  const { data } = useAuth(); 
+  const [quantity, setQuantity] = useState(1);
+  const { data, isLogin } = useAuth(); 
+  const { addToCart, cartItems,handleBuyNow, updateQuantity, removeCart } = useCart();
+  const [selectedCapacity, setSelectedCapacity] = useState("50ML");
+  const handleAddToCart = () => {
+  const cartProduct = {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        brand: product.brand,
+        concentration: product.concentration,
+        odor_retention: product.odor_retention,
+        scent_radiance: product.scent_radiance,
+        gender: product.gender,
+        capacity: selectedCapacity,
+        image: product.image ?? "/fallback.png",
+        quantity: quantity, 
+      };
+      if (!isLogin) {
+        toast.error("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
+        return;
+      } else {
+        addToCart(cartProduct);
+        toast.success("Thêm vào giỏ hàng thành công!");
+      }
+   };
+
+  
+  
   const resolvedParams = useParams<{ categories: string; alias: string }>();
   if(!data || data.length === 0 ) {
     return <div className='text-center'>Loading...</div>;
@@ -35,14 +62,6 @@ interface BenefitItem {
     return <div className='text-center'>Sản phẩm không tồn tại</div>;
   }
  
-
-  const productInfoItems: ProductInfoItem[] = [
-    { icon: "/image/icon/ic-info-1.jpg", text: "Thương hiệu: Gritt" },
-    { icon: "/image/icon/ic-info-2.jpg", text: "Nồng độ: Eau De Parfum" },
-    { icon: "/image/icon/ic-info-3.jpg", text: "Độ lưu mùi: 6-5h" },
-    { icon: "/image/icon/ic-info-4.jpg", text: "Độ tỏa hương: Vừa phải" },
-    { icon: "/image/icon/ic-info-5.jpg", text: "Giới tính: Unisex" }
-  ];
   
   const benefitItems: BenefitItem[] = [
     { icon: "/image/icon/ic-benefit-1.jpg", text: "Cam kết sản phẩm chính hãng 100% (đền 200% giá trị sản phẩm nếu phát hiện hàng giả)" },
@@ -94,37 +113,40 @@ interface BenefitItem {
                 </div>
                 
                 <div className='mb-6'>
-                  <p className='text-3xl font-bold text-red-500'>{product.price.replace(/\./g, ',')} đ</p>
-                </div>
-                
-                <div className='mb-6'>
-                  <p className='text-gray-700 font-medium mb-2'>Dung tích</p>
-                  <div className='flex gap-3'>
-                    <button 
+                <p className='text-gray-700 font-medium mb-2'>Dung tích</p>
+                <div className='flex gap-3'>
+                  <button 
                     type="button"
-                      className='px-4 py-2 border-2 border-[#9C8679] text-[#9C8679] font-medium rounded-lg hover:bg-[#9C8679] hover:text-white transition-colors duration-200' >  50ML
-                    </button>
-                    <button 
-                      type="button"
-                      className='px-4 py-2 border-2 border-gray-300 text-gray-500 font-medium rounded-lg hover:border-[#9C8679] hover:text-[#9C8679] transition-colors duration-200'>100ML
-                    </button>
-                  </div>
+                    className={`px-4 py-2 border-2 ${selectedCapacity === "50ML" 
+                      ? 'border-[#9C8679] text-[#9C8679]' 
+                      : 'border-gray-300 text-gray-500'} font-medium rounded-lg hover:bg-[#9C8679] hover:text-white transition-colors duration-200`}
+                    onClick={() => setSelectedCapacity("50ML")} > 50ML
+                  </button>
+                  <button 
+                    type="button"
+                    className={`px-4 py-2 border-2 ${selectedCapacity === "100ML" 
+                      ? 'border-[#9C8679] text-[#9C8679]' 
+                      : 'border-gray-300 text-gray-500'} font-medium rounded-lg hover:border-[#9C8679] hover:text-[#9C8679] transition-colors duration-200`}
+                    onClick={() => setSelectedCapacity("100ML")} >
+                    100ML
+                  </button>
                 </div>
+              </div>
                 
                 <div className='mb-6'>
                   <p className='text-gray-700 font-medium mb-2'>Số lượng</p>
-                  <ButtonSetQuantity />
+                  <ButtonSetQuantity quantity={quantity} onQuantityChange={setQuantity}  />
                 </div>
                 
                 <div className='flex flex-col sm:flex-row gap-4 mb-8'>
                   <button 
-                    type="button"
+                    type="button" onClick={handleAddToCart}
                     className='bg-[#9C8679] text-white px-6 py-3 rounded-xl font-semibold flex-1 hover:bg-[#8a7569] transition-colors duration-200 flex items-center justify-center gap-2' >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                       <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3z" />
                     </svg>Thêm vào giỏ hàng </button>
                   <button 
-                    type="button"
+                    type="button" onClick={() => handleBuyNow()}
                     className='bg-[#C96F3B] text-white px-6 py-3 rounded-xl font-semibold flex-1 hover:bg-[#b65f2f] transition-colors duration-200 flex items-center justify-center gap-2'>
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
@@ -153,14 +175,46 @@ interface BenefitItem {
             <div className='bg-white rounded-2xl p-6 shadow-sm'>
               <h3 className='text-xl font-bold text-gray-800 mb-4'>Thông tin sản phẩm</h3>
               
-              {productInfoItems.map((item, index) => (
-                <div key={index} className={`flex items-center gap-3 py-4 ${index > 0 ? 'border-t border-gray-200' : ''}`}>
-                  <div className='bg-gray-100 p-1 rounded-full'>
-                    <Image src={item.icon} width={30} height={30} alt={`icon ${index + 1}`} />
-                  </div>
-                  <p className='text-gray-700'>{item.text}</p>
-                </div>
-              ))}
+             <div className="flex items-center gap-3 py-4 border-t border-gray-200">
+            <div className="bg-gray-100 p-1 rounded-full">
+              <Image src="/image/icon/ic-info-1.jpg" width={30} height={30} alt="icon thương hiệu" />
+            </div>
+            <p className="text-gray-700 font-bold">Thương hiệu:</p>
+            <p className="text-gray-700">{product.brand}</p>
+          </div>
+
+          <div className="flex items-center gap-3 py-4 border-t border-gray-200">
+            <div className="bg-gray-100 p-1 rounded-full">
+              <Image src="/image/icon/ic-info-2.jpg" width={30} height={30} alt="icon nồng độ" />
+            </div>
+            <p className="text-gray-700 font-bold">Nồng độ:</p>
+            <p className="text-gray-700">{product.concentration}</p>
+          </div>
+
+          <div className="flex items-center gap-3 py-4 border-t border-gray-200">
+            <div className="bg-gray-100 p-1 rounded-full">
+              <Image src="/image/icon/ic-info-3.jpg" width={30} height={30} alt="icon độ lưu mùi" />
+            </div>
+            <p className="text-gray-700 font-bold">Độ lưu mùi:</p>
+            <p className="text-gray-700">{product.odor_retention}</p>
+          </div>
+
+          <div className="flex items-center gap-3 py-4 border-t border-gray-200">
+            <div className="bg-gray-100 p-1 rounded-full">
+              <Image src="/image/icon/ic-info-4.jpg" width={30} height={30} alt="icon độ tỏa hương" />
+            </div>
+            <p className="text-gray-700 font-bold">Độ tỏa hương:</p>
+            <p className="text-gray-700">{product.scent_radiance}</p>
+          </div>
+
+          <div className="flex items-center gap-3 py-4 border-t border-gray-200">
+            <div className="bg-gray-100 p-1 rounded-full">
+              <Image src="/image/icon/ic-info-5.jpg" width={30} height={30} alt="icon giới tính" />
+            </div>
+            <p className="text-gray-700 font-bold">Giới tính:</p>
+            <p className="text-gray-700">{product.gender}</p>
+          </div>
+
             </div>
             
             {/* Description */} 

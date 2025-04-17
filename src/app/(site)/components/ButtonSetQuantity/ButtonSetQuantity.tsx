@@ -1,31 +1,28 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 
-const QuantityCounter = () => {
-  const [quantity, setQuantity] = useState(1);
-
+const QuantityCounter = ({
+  quantity,
+  onQuantityChange,
+}: {
+  quantity: number;
+  onQuantityChange: (quantity: number) => void;
+}) => {
   return (
     <div className="flex items-center">
       <span className="mr-2">Số lượng:</span>
       <div className="flex border rounded items-center">
         <button
-          onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
-          className="px-3 py-1 border-r"
-        >
-          -
-        </button>
+          onClick={() => onQuantityChange(Math.max(1, quantity - 1))}
+          className="px-3 py-1 border-r" > - </button>
         <input
           type="text"
           value={quantity}
           readOnly
-          className="w-10 text-center border-none"
-        />
+          className="w-10 text-center border-none"/>
         <button
-          onClick={() => setQuantity((prev) => prev + 1)}
-          className="px-3 py-1 border-l"
-        >
-          +
-        </button>
+          onClick={() => onQuantityChange(quantity + 1)}
+          className="px-3 py-1 border-l"  > + </button>
       </div>
     </div>
   );
