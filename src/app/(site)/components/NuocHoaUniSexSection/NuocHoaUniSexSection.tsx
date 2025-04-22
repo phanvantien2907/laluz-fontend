@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import Slider from "react-slick";
 import Link from "next/link";
+import ProductSkeleton from "@/app/(site)/components/ProductSkeleton/ProductSkeleton";
 
 interface Product {
   id: string;
@@ -38,6 +39,7 @@ const NuocHoaUniSexSection:React.FC<SectionProps> = ({products}) => {
     ],
   };
 const dataNuocHoaUniSex = products.filter((p: Product) => p.gender === "Unisex");
+const isLoading = !products || products.length === 0;
   return (
     <>
        <motion.div className='nuoc-hoa-unisex' 
@@ -51,7 +53,10 @@ const dataNuocHoaUniSex = products.filter((p: Product) => p.gender === "Unisex")
         
       <div className="w-full max-w-6xl  mx-auto py-6 gap-6 text-[#9C8679] font-semibold mt-6">
       <Slider {...settings}>
-      {dataNuocHoaUniSex.map((item: Product, index:number) => (
+        {isLoading
+        ? Array.from({ length: 5 }).map((_, index) => (
+      <ProductSkeleton key={index} />))
+      :dataNuocHoaUniSex.map((item: Product, index:number) => (
       <div key={index} className="w-full max-w-xs  bg-white p-4 rounded-2xl shadow-lg text-center border">
       <Link href={`/products/${item.alias}/${item.name}`}>
       <img src={item.image} alt={item.name} className="w-24 h-32 mx-auto object-contain hover:scale-125 transition-transform" />

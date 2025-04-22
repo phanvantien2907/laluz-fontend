@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import axios from "axios";
-import { useCart } from '../../../../../context/CartContext';
-import { useAuth } from '../../../../../context/AuthContext';
+import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 import { ca } from 'date-fns/locale';
 import toast from 'react-hot-toast';
 import { useRouter } from "next/navigation";
-
+import { nation } from '@/lib/api';
 
 const CheckoutPage = () => {
   const [email, setEmail] = useState("");
@@ -47,8 +47,7 @@ const CheckoutPage = () => {
    useEffect(() => {
      const fetchCountries = async () => {
        try {
-         const res = await axios.get(`${process.env.NEXT_PUBLIC_COUNTRY_API}`);
-         const countryNames = res.data.map((country: any) => country.name.common).sort();
+         const countryNames = await nation();
          setCountries(countryNames);
        } catch (error) {
          console.error("Lỗi khi fetch quốc gia:", error);

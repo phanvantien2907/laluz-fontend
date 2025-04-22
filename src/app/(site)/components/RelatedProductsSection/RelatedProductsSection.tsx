@@ -19,7 +19,7 @@ interface SectionProps {
 }
 
 const RelatedProductsSection:React.FC<SectionProps> = ({products}) => {
-  
+
   const settings = {
     dots: true,
     infinite: true,

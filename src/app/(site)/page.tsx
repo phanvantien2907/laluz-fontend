@@ -1,5 +1,5 @@
 "use client";
-import React from 'react'
+import React, { use } from 'react'
 import {Carousel,CarouselContent,CarouselItem,CarouselNext,CarouselPrevious,} from "@/components/ui/carousel";
 import Image from 'next/image';
 import Slider from "react-slick";
@@ -8,12 +8,12 @@ import "slick-carousel/slick/slick-theme.css";
 import { tai_sao_chon_laluz_parfums,stuDio } from '../mockdata';
 import { motion } from "framer-motion";
 import { div } from 'framer-motion/client';
-import NuocHoaNuSection from './components/NuocHoaNuSection/NuocHoaNuSection';
-import NuocHoaNamSection from './components/NuocHoaNamSection/NuocHoaNamSection';
-import NuocHoaUniSexSection from './components/NuocHoaUniSexSection/NuocHoaUniSexSection';
-import ContentHome from './components/ContentHome/ContentHome';
+import NuocHoaNuSection from "@/app/(site)/components/NuocHoaNuSection/NuocHoaNuSection";
+import NuocHoaNamSection from "@/app/(site)/components/NuocHoaNamSection/NuocHoaNamSection";
+import NuocHoaUniSexSection from "@/app/(site)/components/NuocHoaUniSexSection/NuocHoaUniSexSection";
+import ContentHome from "@/app/(site)/components/ContentHome/ContentHome";
 // import { Item } from '@radix-ui/react-dropdown-menu';
-import { useAuth } from '../../../context/AuthContext';
+import { useProduct } from '@/hooks/useProduct';
 
 
 const images = [
@@ -27,7 +27,7 @@ const images = [
 
 const Home = () => {
 
-  const {data} = useAuth();
+  const data = useProduct();
   
   const settings = {
     dots: true,

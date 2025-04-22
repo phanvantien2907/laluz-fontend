@@ -1,14 +1,15 @@
 "use client";
-import React from 'react'
+import React, { use } from 'react'
 import { useState } from 'react';
 import CustomBreadcrumb from '@/app/(site)/components/CustomBreadcrumb/CustomBreadcrumb'
 import Link from 'next/link'
 import axios from 'axios';
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { useAuth } from '@/context/AuthContext';
 
 const LoginPage = () => {
-
+  const login = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -18,22 +19,7 @@ const LoginPage = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    try {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_API}/api/auth/login`, {
-        email,
-        password,
-      });
-      localStorage.setItem("access_token", res.data.access_token);
-      localStorage.setItem("email", email);
-      localStorage.setItem("expires_in", (Date.now() + 3600 * 1000).toString());
-      toast.success("Đăng nhập thành công!")
-      setTimeout(() => {
-        location.assign("/");
-      }, 1000);
-    }
-    catch (err:any) { 
-      toast.error(err.response?.data?.message || "Tài khoản hoặc mật khẩu không đúng!");
-    }
+    await login.login(email, password);
   }
 
 

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import Slider from "react-slick";
 import Link from "next/link";
+import ProductSkeleton from "@/app/(site)/components/ProductSkeleton/ProductSkeleton";
 
 interface Product {
   id: string;
@@ -37,7 +38,9 @@ const NuocHoaNamSection:React.FC<SectionProps> = ({products}) => {
       },
     ],
   };
-const dataNuocHoaNam = products.filter((p: Product) => p.gender === "Nam");
+
+  const dataNuocHoaNam = products.filter((p: Product) => p.gender === "Nam");
+  const isLoading = !products || products.length === 0;
 
   return (
     <>
@@ -51,7 +54,10 @@ const dataNuocHoaNam = products.filter((p: Product) => p.gender === "Nam");
 
       <div className="w-full max-w-6xl  mx-auto py-6 gap-6 text-[#9C8679] font-semibold mt-6">
       <Slider {...settings}>
-      {dataNuocHoaNam.map((item: Product, index: number) => (
+        {isLoading
+          ? Array.from({ length: 5 }).map((_, index) => (
+         <ProductSkeleton key={index} />))
+    :dataNuocHoaNam.map((item: Product, index: number) => (
       <div key={index} className=" relative w-full max-w-xs  bg-white p-4 rounded-2xl shadow-lg text-center border">
       <Link href={`/products/${item.alias}/${item.name}`}>
       <p className='text-md absolute top-2 right-2 px-2  bg-red-500 text-white rounded-xl'>{item.status}</p>

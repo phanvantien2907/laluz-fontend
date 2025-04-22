@@ -9,11 +9,13 @@ import { FaPhoneAlt } from "react-icons/fa";
 import Link from 'next/link';
 import ButtonSetQuantity from '@/app/(site)/components/ButtonSetQuantity/ButtonSetQuantity';
 import RelatedProductsSection from '@/app/(site)/components/RelatedProductsSection/RelatedProductsSection';
-import { useAuth } from '../../../../../../context/AuthContext';
-import { CartItem, useCart } from '../../../../../../context/CartContext';
+import { useAuth } from '@/context/AuthContext';
+import { CartItem, useCart } from '@/context/CartContext';
 import { toast } from 'react-hot-toast';
 import { useRouter } from "next/navigation";
 import { se } from 'date-fns/locale';
+import { useProduct } from '@/hooks/useProduct';
+import loadingPage from '@/app/(site)/products/[alias]/[name]/loading';
 
 
 interface BenefitItem {
@@ -23,7 +25,8 @@ interface BenefitItem {
   
   const ProductPage = () => { 
   const [quantity, setQuantity] = useState(1);
-  const { data, isLogin } = useAuth(); 
+  const { isLogin } = useAuth(); 
+  const data = useProduct();
   const { addToCart, cartItems,handleBuyNow, updateQuantity, removeCart } = useCart();
   const [selectedCapacity, setSelectedCapacity] = useState("50ML");
   const handleAddToCart = () => {
@@ -39,6 +42,7 @@ interface BenefitItem {
         capacity: selectedCapacity,
         image: product.image ?? "/fallback.png",
         quantity: quantity, 
+        total: (product.price * quantity).toString(),
       };
       if (!isLogin) {
         toast.error("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
@@ -53,8 +57,8 @@ interface BenefitItem {
   
   const resolvedParams = useParams<{ categories: string; alias: string }>();
   if(!data || data.length === 0 ) {
-    return <div className='text-center'>Loading...</div>;
-
+    // return <div className='text-center'>Loading...</div>;
+    return loadingPage(); // dang fix doan nay
   }
   const product = data.find((p) => p.alias === resolvedParams .alias);
   

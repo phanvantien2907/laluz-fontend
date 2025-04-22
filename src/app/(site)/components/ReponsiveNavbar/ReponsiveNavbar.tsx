@@ -8,8 +8,8 @@ import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import {AlertDialog, AlertDialogAction,AlertDialogCancel,AlertDialogContent,AlertDialogDescription, AlertDialogFooter,AlertDialogHeader,AlertDialogTitle,AlertDialogTrigger,} from "@/components/ui/alert-dialog"
 import { IoLogOut } from "react-icons/io5";
-import { useAuth } from '../../../../../context/AuthContext';
-import { useCart } from '../../../../../context/CartContext';
+import { useAuth } from "@/context/AuthContext";
+import { useCart } from "@/context/CartContext";
 
 const ReponsiveNavbar = () => {
   const {isLogin} = useAuth();
@@ -95,7 +95,7 @@ const ReponsiveNavbar = () => {
            </AlertDialogTrigger>
           <AlertDialogContent>
           <AlertDialogHeader>
-          <AlertDialogTitle className='bg-black'>Bạn chắc chắn muốn đăng xuất ?</AlertDialogTitle>
+          <AlertDialogTitle className='text-black'>Bạn chắc chắn muốn đăng xuất ?</AlertDialogTitle>
           </AlertDialogHeader>
           <AlertDialogFooter>
          <AlertDialogCancel>Hủy</AlertDialogCancel>

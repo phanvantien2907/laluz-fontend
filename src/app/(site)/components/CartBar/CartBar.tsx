@@ -1,5 +1,5 @@
 "use client";
-import { useCart } from "../../../../../context/CartContext";
+import { useCart } from "@/context/CartContext";
 import Image from "next/image";
 import { IoCloseSharp } from "react-icons/io5";
 import { useEffect } from "react";
