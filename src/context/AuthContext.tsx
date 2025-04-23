@@ -34,11 +34,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const login = async (email:string, password:string): Promise<void> => {
         try {
           const res = await loginApi(email, password);
+          const role = res.role || res.user?.role || "guest";
+          const adminCheck = window.location.pathname.includes("/admin/login");
+          if(adminCheck && role !== "admin") {
+            toast.error("Bạn không có quyền truy cập vào trang này!");
+            return;
+          }
+          localStorage.setItem("role", role);
           localStorage.setItem("access_token", res.access_token);
           localStorage.setItem("email", email);
           localStorage.setItem("expires_in", (Date.now() + 3600 * 1000).toString());
           toast.success("Đăng nhập thành công!")
           setTimeout(() => {
+            const getRole = localStorage.getItem("role");
+            if(getRole == "admin") {
+              location.assign("/admin/dashboard");
+              return;
+            }
             location.assign("/");
           }, 1000);
         }
@@ -48,11 +60,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
   
    const handleLogout = () =>  {
+      const role = localStorage.getItem("role");
       localStorage.removeItem("access_token");
       localStorage.removeItem("email");
+      localStorage.removeItem("role");
       localStorage.removeItem("expires_in");
+      if(role == "admin") {
+        router.replace("/admin/login");
+      }
+      else {
+      router.replace("/login");
+      }
       setIsLogin(false);
-      router.push("/login");
       toast.success("Đăng xuất thành công");
     }
 

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 type FormType = "login" | "register";
 
@@ -13,19 +14,31 @@ interface AuthFormProps extends React.ComponentPropsWithoutRef<"div"> {
   formType?: FormType;
 }
 
-export function AuthForm({
-  className,
-  formType = "login",
-  ...props
-}: AuthFormProps) {
+export function AuthForm({ className,formType = "login",...props}: AuthFormProps) {
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const isLogin = formType === "login";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    try {
+      if(formType == 'login') {
+        await login(email, password);
+      }
+      else {
+        // logic đăng ký sẽ được thực hiện ở đây
+      }
+    } catch(err) {
+      console.error(err);
+
+    }
+    finally {
     setLoading(false);
+    }
   };
 
   return (
@@ -48,16 +61,11 @@ export function AuthForm({
                 <div className="grid gap-2">
                   <Label htmlFor="fullname">Full Name</Label>
                   <Input id="fullname" type="text" placeholder="Your full name"  required />
-                </div>
-              )}
+                </div> )}
 
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="example@example.com"
-                  required />
+                <Input id="email" value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="example@example.com" required />
               </div>
 
               <div className="grid gap-2">
@@ -71,15 +79,14 @@ export function AuthForm({
                     </Link>
                   )}
                 </div>
-                <Input id="password" type="password" required />
+                <Input value={password} onChange={(e) => setPassword(e.target.value)} id="password" type="password" required />
               </div>
 
               {!isLogin && (
                 <div className="grid gap-2">
                   <Label htmlFor="confirmPassword">Confirm Password</Label>
                   <Input id="confirmPassword" type="password" required />
-                </div>
-              )}
+                </div>  )}
 
               <Button
                 type="submit"
