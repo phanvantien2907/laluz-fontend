@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { use } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { FaHeart } from "react-icons/fa";
@@ -24,67 +24,18 @@ import { useCart } from "@/context/CartContext";
 import { set } from 'date-fns';
 import CartBar from '../CartBar/CartBar';
 import { pre } from 'framer-motion/client';
+import { useMenu } from '@/hooks/useMenu';
 
-
-
-interface menuItem {
-  id: string;
-  name: string;
-  url: string;
-}
 
 const  Header = () => {
   const [showCart, setShowCart] = useState(false);
   const {totalQuantity} = useCart();
   const  tonggleCart = () => setShowCart(!showCart);
-  const [menuData, setMenuData] = useState<menuItem[]>([]);
   const [open, setOpen] = useState(false)
-  const [isLogin, setIsLogin] = useState(false)
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
   const router = useRouter();
   const { logout } = useAuth();
+  const { menuData, username, email, isLogin } = useMenu();
 
-  useEffect(() => {
-    const access_token = localStorage.getItem("access_token");
-    const expires_in = localStorage.getItem("expires_in");
-    setIsLogin(!!access_token);
-    // các route cần được bảo vệ
-    const protectedRoutes = [  "/profile",  "/profile/orders", "/profile/change-password" ];
-    const currentPath = window.location.pathname;
-    // kiểm tra xem đường dẫn hiện tại có nằm trong danh sách các route được bảo vệ hay không
-    const isProtectedRoute = protectedRoutes.some(
-      (route) => currentPath === route || currentPath.startsWith(`${route}/`)
-    ); 
-
-    if(!access_token && isProtectedRoute) {   
-     router.replace("/login");
-      return;
-    }
- 
-    
-    const storedEmail = localStorage.getItem("email") || "";
-    setEmail(storedEmail);
-    const convertUser = storedEmail.split("@")[0].toLowerCase();
-    setUsername(convertUser);
-
-
-    if(access_token && expires_in && Date.now() > parseInt(expires_in)) {
-      toast.error("Phiên đăng nhập hết hạn, vui lòng đăng nhập lại!");
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("email");
-      localStorage.removeItem("expires_in");
-      router.replace("/login");
-      return;
-    }
-
-
-    axios
-      .get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/menu`)
-      .then((res) => setMenuData(res.data.data))
-      .catch((err) => console.error("Lỗi gọi API:", err));
-  }, []);
-  
 
   return (
     <div className="">

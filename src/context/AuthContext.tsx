@@ -2,11 +2,14 @@
 import { createContext, useContext, useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
-import { login as loginApi } from "@/lib/api";
+import { login as loginApi, register } from "@/lib/api";
+import { set } from "date-fns";
+import { de } from "date-fns/locale";
 
 interface AuthContextType {
   isLogin: boolean;
   login: (email: string, password:string) => Promise<void>;
+  register: (email: string, password: string) => Promise<void>;
   logout: () => void;
   // data: any[];
 }
@@ -19,17 +22,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [data, setData] = useState([]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
     useEffect(() => {
     const token = localStorage.getItem("access_token");
-    setIsLogin(!!token);}, []);
- 
-  // useEffect(() => {
-  //   axios
-  //     .get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/product`)
-  //     .then((res) => setData(res.data.data))
-  //     .catch((err) => console.error("Lỗi gọi API:", err));
-  // }, []);
+    const expires_in = localStorage.getItem("expires_in");
+      if(token && expires_in && Date.now() > parseInt(expires_in)) {
+      toast.error("Phiên đăng nhập hết hạn, vui lòng đăng nhập lại!");
+       localStorage.removeItem("access_token");
+       localStorage.removeItem("email");
+      localStorage.removeItem("expires_in");
+      setIsLogin(false);
+       router.replace("/login");
+       return;
+     }
+      setIsLogin(!!token);}, []);
+
 
       const login = async (email:string, password:string): Promise<void> => {
         try {
@@ -46,11 +54,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           localStorage.setItem("expires_in", (Date.now() + 3600 * 1000).toString());
           toast.success("Đăng nhập thành công!")
           setTimeout(() => {
-            const getRole = localStorage.getItem("role");
-            if(getRole == "admin") {
-              location.assign("/admin/dashboard");
-              return;
-            }
+          const getRole = localStorage.getItem("role");
+          if(getRole == "admin") {
+          location.assign("/admin/dashboard");
+          return;
+          }
             location.assign("/");
           }, 1000);
         }
@@ -58,8 +66,40 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           toast.error(err.response?.data?.message || "Tài khoản hoặc mật khẩu không đúng!");
         }
       }
-  
-   const handleLogout = () =>  {
+
+       const handleRegister = async (email: string, password: string): Promise<void> => {
+         setError("");
+         try {
+           const res = await register(email, password);
+           const getRole = res.data?.role || res.role || "user";
+           toast.success("Đăng ký tài khoản thành công, vui lòng kiểm tra email!");
+            switch(getRole) {
+            case "admin":
+              router.push("/admin/login");
+              break;
+            case "manage":
+              router.push("/admin/login");
+              break;
+            default:
+              router.push("/login");
+              break;
+          }
+         } catch (err: any) {
+           if (err.response?.data?.errors) {
+             Object.values(err.response.data.errors).forEach(
+               (messages: any) => {
+                 messages.forEach((msg: string) => toast.error(msg));
+               }
+             );
+           } else {
+             toast.error(
+               err.response?.data?.message || "Đã có lỗi khi đăng ký tài khoản!"
+             );
+           }
+         }
+       };
+      
+      const handleLogout = () =>  {
       const role = localStorage.getItem("role");
       localStorage.removeItem("access_token");
       localStorage.removeItem("email");
@@ -76,7 +116,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
   return (
-    <AuthContext.Provider value={{ isLogin, logout: handleLogout, login }}>
+    <AuthContext.Provider value={{ isLogin, logout: handleLogout, login, register: handleRegister }}>
       {children}
     </AuthContext.Provider>
   );

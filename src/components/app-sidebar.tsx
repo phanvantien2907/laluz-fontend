@@ -32,6 +32,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { useMenuAdmin } from "@/hooks/useMenuAdmin"
+import Link from "next/link"
 
 const data = {
   user: {
@@ -42,7 +44,7 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/admin/dashboard",
       icon: LayoutDashboardIcon,
     },
     {
@@ -61,8 +63,8 @@ const data = {
       icon: FolderIcon,
     },
     {
-      title: "Team",
-      url: "#",
+      title: "Quản lý người dùng",
+      url: "/admin/user",
       icon: UsersIcon,
     },
   ],
@@ -150,7 +152,13 @@ const data = {
   ],
 }
 
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const {menuData, loading, error} = useMenuAdmin();
+  if(loading) return <div>Loading...</div>
+   if (error) {
+     return <div>Error: {error.message}</div>;
+   }
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -159,10 +167,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5">
-              <a href="#">
+              <Link href="/admin/dashboard">
                 <ArrowUpCircleIcon className="h-5 w-5" />
                 <span className="text-base font-semibold">Acme Inc.</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

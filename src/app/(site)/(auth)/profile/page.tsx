@@ -14,16 +14,17 @@ import { cn } from "@/lib/utils"
 import { FaCircleUser } from "react-icons/fa6"
 import { FaSignOutAlt } from "react-icons/fa"
 import { Calendar } from "@/components/ui/calendar";
-import { useAuth } from '../../../../../context/AuthContext'
 import { AlertDialog, AlertDialogAction,AlertDialogCancel,AlertDialogContent,AlertDialogDescription, AlertDialogFooter, AlertDialogHeader,AlertDialogTitle,AlertDialogTrigger,} from "@/components/ui/alert-dialog";
-
+import { useProtected } from "@/hooks/use-protected"
+import { useAuth } from '@/context/AuthContext'
 
 const ProfilePage = () => {
   const [avatar, setAvatar] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   const { logout } = useAuth();
-
+  const isAuthorized = useProtected();
+  if(!isAuthorized) return null;
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {

@@ -30,3 +30,33 @@ export const nation = async () => {
        }
 }
 
+export const menu = async () => {
+  try {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/menu`);
+    return res.data.data;
+  } catch (err: any) {
+    console.error("Lỗi gọi API:", err);
+    return null;
+  }
+};
+
+export const menu_admin = async () => {
+  try {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/menu_admin`);
+    return res.data.data;
+  } catch (err: any) {
+    console.error("Lỗi gọi API:", err);
+    return null;
+  }
+};
+export const user = async () => {
+  try {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/user`);
+    return res.data.data;
+  } catch (err: any) {
+    console.error("Lỗi gọi API:", err);
+    return null;
+  }
+};
+
+

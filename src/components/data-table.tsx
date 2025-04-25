@@ -106,6 +106,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
+import { useProduct } from "@/hooks/useProduct"
 
 export const schema = z.object({
   id: z.number(),
@@ -403,7 +404,6 @@ export function DataTable({
       })
     }
   }
-
   return (
     <Tabs
       defaultValue="outline"
@@ -491,8 +491,7 @@ export function DataTable({
       </div>
       <TabsContent
         value="outline"
-        className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
-      >
+        className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
         <div className="overflow-hidden rounded-lg border">
           <DndContext
             collisionDetection={closestCenter}
@@ -663,7 +662,7 @@ const chartConfig = {
 
 function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
   const isMobile = useIsMobile()
-
+  const data = useProduct();
   return (
     <Sheet>
       <SheetTrigger asChild>

@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { FaCircleUser } from "react-icons/fa6"
 import { FaSignOutAlt } from "react-icons/fa"
 import { FaEye, FaEyeSlash } from "react-icons/fa"
+import { useProtected } from "@/hooks/use-protected"
 
 const ChangePasswordPage = () => {
   const [avatar, setAvatar] = useState<string | null>(null)
@@ -16,7 +17,8 @@ const ChangePasswordPage = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-
+  const isAuthorized = useProtected();
+    if(!isAuthorized) return null;
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {

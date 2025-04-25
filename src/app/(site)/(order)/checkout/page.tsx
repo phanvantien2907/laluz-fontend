@@ -10,6 +10,7 @@ import { ca } from 'date-fns/locale';
 import toast from 'react-hot-toast';
 import { useRouter } from "next/navigation";
 import { nation } from '@/lib/api';
+import { useProtected } from '@/hooks/use-protected';
 
 const CheckoutPage = () => {
   const [email, setEmail] = useState("");
@@ -29,6 +30,7 @@ const CheckoutPage = () => {
   const [showCoupon, setShowCoupon] = useState(false);
   const { cartItems, handleCheckOut, clearCart } = useCart();
   const router = useRouter();
+  const  isAuthorized  = useProtected();
 
   const parsePrice = (priceStr: string) => {
     
@@ -60,6 +62,8 @@ const CheckoutPage = () => {
      }
    }, []
   );
+  if(!isAuthorized) return null;
+
   
   const handleSubmit = async () => {
     try {

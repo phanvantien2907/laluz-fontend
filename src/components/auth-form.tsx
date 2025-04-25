@@ -16,9 +16,11 @@ interface AuthFormProps extends React.ComponentPropsWithoutRef<"div"> {
 
 export function AuthForm({ className,formType = "login",...props}: AuthFormProps) {
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, register } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [password_confirmation, setPasswordConfirmation] = useState("");
+  
 
   const isLogin = formType === "login";
 
@@ -30,7 +32,7 @@ export function AuthForm({ className,formType = "login",...props}: AuthFormProps
         await login(email, password);
       }
       else {
-        // logic đăng ký sẽ được thực hiện ở đây
+        await register(email, password);
       }
     } catch(err) {
       console.error(err);
@@ -57,12 +59,6 @@ export function AuthForm({ className,formType = "login",...props}: AuthFormProps
         <CardContent>
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
-              {!isLogin && (
-                <div className="grid gap-2">
-                  <Label htmlFor="fullname">Full Name</Label>
-                  <Input id="fullname" type="text" placeholder="Your full name"  required />
-                </div> )}
-
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input id="email" value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="example@example.com" required />
@@ -85,7 +81,7 @@ export function AuthForm({ className,formType = "login",...props}: AuthFormProps
               {!isLogin && (
                 <div className="grid gap-2">
                   <Label htmlFor="confirmPassword">Confirm Password</Label>
-                  <Input id="confirmPassword" type="password" required />
+                  <Input value={password_confirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} id="confirmPassword" type="password" required />
                 </div>  )}
 
               <Button
