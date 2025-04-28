@@ -14,6 +14,26 @@ import {
 } from "@tanstack/react-table";
 
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
@@ -31,6 +51,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { useAdmin } from "@/hooks/useAdmin";
+import { Plus, Columns3 } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import AddNew from "@/app/admin/user/components/add-new";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -49,6 +73,8 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>( []);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   console.log("Data count:", data?.length);
+  const isAuthorized = useAdmin();
+  
   const table = useReactTable({
     data,
     columns,
@@ -68,47 +94,45 @@ export function DataTable<TData, TValue>({
     },
     debugTable: true,
   });
-
+  if (!isAuthorized) return null;
   return (
     <>
-    <div className="flex items-center justify-between">
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)  }
-          className="max-w-sm"/>
-      </div>
-      <DropdownMenu>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center py-4">
+          <Input
+            placeholder="Filter emails..."
+            value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("email")?.setFilterValue(event.target.value)  } className="max-w-sm" />
+        </div>
+        <div className="flex items-center gap-2">
+          <AddNew />
+        <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Views
+              <Columns3 />Views
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             {table
               .getAllColumns()
-              .filter(
-                (column) => column.getCanHide()
-              )
+              .filter((column) => column.getCanHide())
               .map((column) => {
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
                     className="capitalize"
                     checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
+                    onCheckedChange={(value) =>  column.toggleVisibility(!!value) }>
                     {column.id}
                   </DropdownMenuCheckboxItem>
-                )
+                );
               })}
           </DropdownMenuContent>
         </DropdownMenu>
-    </div>
+        </div>
+       
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -164,14 +188,16 @@ export function DataTable<TData, TValue>({
           variant="outline"
           size="sm"
           onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}  >
+          disabled={!table.getCanPreviousPage()}
+        >
           Previous
         </Button>
         <Button
           variant="outline"
           size="sm"
           onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()} >
+          disabled={!table.getCanNextPage()}
+        >
           Next
         </Button>
       </div>

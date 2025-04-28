@@ -10,9 +10,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { EditForm } from "@/app/admin/user/components/edit";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 export interface User {
   id: string;
   email: string;
@@ -23,12 +23,20 @@ export interface User {
 
 export const columns: ColumnDef<User>[] = [
   {
+    accessorKey: "id",
+    header: "ID",
+    cell: ({ row }) => {
+      return <div>{row.index + 1}</div>;
+    }
+  },
+  {
     accessorKey: "email",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
           Email
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
@@ -41,7 +49,8 @@ export const columns: ColumnDef<User>[] = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} >
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
           Role
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
@@ -60,6 +69,19 @@ export const columns: ColumnDef<User>[] = [
     ),
   },
   {
+    accessorKey: "email_verified_at",
+    header: "Email Verified",
+    cell: ({ row }) => {
+      const Verified = row.original.email_verified_at;
+      const format_date = Verified ? new Date(Verified).toLocaleDateString("vi-VN") : null;
+        return (
+          <span  className={Verified ? "text-green-500" : "text-red-500" }>
+            {Verified ? format_date: "Pending"}
+          </span>
+        );
+    }
+  },
+  {
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
@@ -72,11 +94,13 @@ export const columns: ColumnDef<User>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(user.id)}>
-              Copy ID
-            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(user.id)}> Copy ID
+            </DropdownMenuItem >
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <EditForm trigger={ <span className="flex items-center cursor-pointer">  Edit </span> }  />
+             </DropdownMenuItem>
             <DropdownMenuItem>View</DropdownMenuItem>
             <DropdownMenuItem>Delete</DropdownMenuItem>
             <DropdownMenuItem>Lock</DropdownMenuItem>

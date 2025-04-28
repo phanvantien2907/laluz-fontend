@@ -1,4 +1,5 @@
 import axios from "axios";
+import { data } from "framer-motion/client";
 
 export const login = async (email: string, password: string) => {
     const res = await axios.post( `${process.env.NEXT_PUBLIC_SERVER_API}/api/auth/login`,  { email, password });
@@ -17,6 +18,16 @@ export const product = async () => {
     } catch (err: any) {
         console.error("Lỗi gọi API:", err);
         return null;
+    }
+};
+
+export const createProduct = async (data:any) => {
+    try {
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_API}/api/product`, data);
+        return res.data;
+    } catch (err: any) {
+        console.error("Lỗi khi tạo sản phẩm:", err);
+        throw err;
     }
 };
 

@@ -1,6 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { DataTable } from "@/app/admin/components/data-table";
+import { DataTable } from "@/app/admin/user/data-table";
 import { SiteHeader } from "@/components/site-header";
 import { User, columns } from "@/app/admin/user/colums";
 
@@ -32,9 +32,6 @@ export default async function UserManagerPage() {
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-              <div className="px-4 lg:px-6">
-                <h1 className="text-2xl font-bold">Quản lý người dùng</h1>
-              </div>
               <DataTable columns={columns} data={data} />
             </div>
           </div>
