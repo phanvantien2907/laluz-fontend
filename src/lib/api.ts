@@ -11,9 +11,10 @@ export const register = async (email: string, password: string) => {
     return res.data;
 };
 
-export const product = async () => {
+export const product = async (isAdmin = false) => {
     try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/product`);
+      const url = isAdmin ? `${process.env.NEXT_PUBLIC_SERVER_API}/api/product?admin=1` : `${process.env.NEXT_PUBLIC_SERVER_API}/api/product` 
+        const res = await axios.get(url);
         return res.data.data;
     } catch (err: any) {
         console.error("Lỗi gọi API:", err);
@@ -21,12 +22,33 @@ export const product = async () => {
     }
 };
 
+
 export const createProduct = async (data:any) => {
     try {
         const res = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_API}/api/product`, data);
         return res.data;
     } catch (err: any) {
         console.error("Lỗi khi tạo sản phẩm:", err);
+        throw err;
+    }
+};
+
+export const editProduct = async (id: string, data:any) => {
+    try {
+        const res = await axios.put(`${process.env.NEXT_PUBLIC_SERVER_API}/api/product/${id}`, data);
+        return res.data;
+    } catch (err: any) {
+        console.error("Lỗi sửa sản phẩm:", err);
+        throw err;
+    }
+};
+
+export const deleteProduct = async (id: string) => {
+    try {
+        const res = await axios.delete(`${process.env.NEXT_PUBLIC_SERVER_API}/api/product/${id}`);
+        return res.data;
+    } catch (err: any) {
+        console.error("Lỗi xóa sản phẩm:", err);
         throw err;
     }
 };

@@ -7,7 +7,7 @@ import AddNew from "@/app/admin/product/components/add-new";
 import { product } from "@/lib/api";
 
 async function getProducts(): Promise<Product[]> {
-  const data = await product();
+  const data = await product(true);
   return data || [];
 }
 

@@ -2,6 +2,7 @@
 import { ColumnDef, sortingFns } from "@tanstack/react-table";
 import { MoreHorizontal, ArrowUpDown, ImportIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,10 +13,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { EditForm } from "@/app/admin/product/components/edit";
-import { format, parseISO } from "date-fns";
+import ViewDialog from "@/app/admin/product/components/view";
+import DeleteDialog from "@/app/admin/product/components/delete";
 
 export interface Product {
   id: string;
+  alias: string;
   name: string;
   brand: string;
   scent_radiance: string;
@@ -124,8 +127,7 @@ export const columns: ColumnDef<Product>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(product.id)}
-            >
+              onClick={() => navigator.clipboard.writeText(product.id) .then(() => toast.success("Copy ID thành công!")) .catch(() => toast.error("Lỗi copy ID!"))}>
               Copy ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -134,11 +136,28 @@ export const columns: ColumnDef<Product>[] = [
                 trigger={
                   <span className="flex items-center cursor-pointer">Edit</span>
                 }
+                productID={product.id}
+                defaultValues={product}
               />
             </DropdownMenuItem>
-            <DropdownMenuItem>View</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
-            <DropdownMenuItem>Lock</DropdownMenuItem>
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <ViewDialog
+             trigger= {
+              <span className="flex items-center cursor-pointer">View</span>
+              }
+              productID={product.id}
+              defaultValues={product}
+              />
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+             <DeleteDialog
+              trigger={
+                <span className="flex items-center cursor-pointer">Delete</span>
+              }
+              productID={product.id}
+              defaultValues={product}
+             />
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

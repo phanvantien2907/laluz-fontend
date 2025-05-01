@@ -26,17 +26,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
     const token = localStorage.getItem("access_token");
+    const role = localStorage.getItem("role");
     const expires_in = localStorage.getItem("expires_in");
-      if(token && expires_in && Date.now() > parseInt(expires_in)) {
-      toast.error("Phiên đăng nhập hết hạn, vui lòng đăng nhập lại!");
-       localStorage.removeItem("access_token");
-       localStorage.removeItem("email");
-      localStorage.removeItem("expires_in");
-      setIsLogin(false);
-       router.replace("/login");
-       return;
+    if(token && expires_in && Date.now() > parseInt(expires_in)) {
+    toast.error("Phiên đăng nhập hết hạn, vui lòng đăng nhập lại!");
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("email");
+    localStorage.removeItem("expires_in");
+    setIsLogin(false);
+    if(role == "admin") {
+    router.replace("/admin/login");
+    return;
+    }
+     router.replace("/login");
+    return;
      }
-      setIsLogin(!!token);}, []);
+    setIsLogin(!!token);}, []);
 
 
       const login = async (email:string, password:string): Promise<void> => {

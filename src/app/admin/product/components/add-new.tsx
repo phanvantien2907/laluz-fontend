@@ -27,15 +27,11 @@ import { UseFileManager,openFileManager } from '@/hooks/useFileManager';
 import { ProductFormData, useAddNewForm} from '@/hooks/product/useAddNewForm';
 import toast from 'react-hot-toast';
 import { createProduct } from "@/lib/api";
-import { data } from 'framer-motion/client';
 import { SubmitHandler } from "react-hook-form";
-import { Alias } from '@/lib/alias';
-import { set } from 'date-fns';
 
 const AddNew = () => {
   const { register, handleSubmit, setValue, watch } = useAddNewForm();
   const [imageUrl, setImageUrl] = useState("");
-  const [aliasUrl, setAliasUrl] = useState("");
   const addProduct = createProduct;
 
     UseFileManager((fileUrl: string) => {
@@ -43,14 +39,7 @@ const AddNew = () => {
     setValue("image", fileUrl);
   })
 
-  // const handleAliasChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const nameValue = e.target.value;
-  //   const generatedAlias = Alias(nameValue);
-  //   setAliasUrl(generatedAlias);
-  //   setValue("alias", generatedAlias);
-  // }
-
-
+  
   const onSubmit: SubmitHandler<ProductFormData> = async (data) => {
     try {
       await addProduct(data);
@@ -80,10 +69,6 @@ const AddNew = () => {
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-right"> Name</Label>
                 <Input id="name" {...register("name", {required: true})} placeholder='Tên sản phẩm' className="col-span-3" />
-              </div>
-               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="brand" className="text-right"> Alias </Label>
-                <Input id="brand" {...register("alias")} placeholder='Alias tự động tạo' className="col-span-3" />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="brand" className="text-right"> Brand </Label>
