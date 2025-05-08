@@ -1,5 +1,6 @@
 import axios from "axios";
-import { data } from "framer-motion/client";
+import { th } from "date-fns/locale";
+
 
 export const login = async (email: string, password: string) => {
     const res = await axios.post( `${process.env.NEXT_PUBLIC_SERVER_API}/api/auth/login`,  { email, password });
@@ -82,9 +83,11 @@ export const menu_admin = async () => {
     return null;
   }
 };
+
 export const user = async () => {
   try {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/user`);
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/user`, {
+    });
     return res.data.data;
   } catch (err: any) {
     console.error("Lỗi gọi API:", err);
@@ -92,4 +95,103 @@ export const user = async () => {
   }
 };
 
+export const createUser = async (data: any) => {
+  try {
+    const res = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_API}/api/user`, data);
+    return res.data.data;
+  } catch (err: any) {
+    console.error("Lỗi khi tạo user:", err);
+    return null;
+  }
+};
 
+export const getUserByID = async (id: string) => {
+  try {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/user/${id}`);
+    return res.data.data;
+  } catch (err: any) {
+    console.error("Lỗi tìm ID:", err);
+    return null;
+  }
+};
+
+export const editUser = async (id:string, data: any) => {
+  try {
+    const res = await axios.put(`${process.env.NEXT_PUBLIC_SERVER_API}/api/user/${id}`, data);
+    return res.data.data;
+  } catch (err: any) {
+    console.error("Lỗi cập nhật:", err);
+    return null;
+  }
+};
+
+export const deleteUser = async (id: string) => {
+  try {
+    const res = await axios.delete(`${process.env.NEXT_PUBLIC_SERVER_API}/api/user/${id}`);
+    return res.data.data;
+  } catch (err: any) {
+    console.error("Lỗi xóa user:", err);
+    return null;
+  }
+};
+
+export const lockUser = async (id: string) => {
+  try {
+    const res = await axios.patch(`${process.env.NEXT_PUBLIC_SERVER_API}/api/user/${id}/lock`);
+    return res.data.data;
+  } catch (err: any) {
+    console.error("Lỗi khi khóa user:", err);
+    throw err;
+  }
+};
+
+export const order = async () => {
+  try {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/order`, {
+    });
+    return res.data.data.data;
+  } catch (err: any) {
+    console.error("Lỗi gọi API:", err);
+    return null;
+  }
+};
+
+export const editOrder = async (id:string, data: any) => {
+  try {
+    const res = await axios.put(`${process.env.NEXT_PUBLIC_SERVER_API}/api/order/${id}`, data);
+    return res.data.data.data;
+  } catch (err: any) {
+    console.error("Lỗi cập nhật đơn hàng:", err);
+    throw err;
+  }
+};
+
+export const getOrderByID = async (id: string) => {
+  try {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/order/${id}`);
+    return res.data.data.data;
+  } catch (err: any) {
+    console.error("Lỗi tìm ID:", err);
+    throw err;
+  }
+};
+
+export const deleteOrder = async (id: string) => {
+  try {
+    const res = await axios.delete(`${process.env.NEXT_PUBLIC_SERVER_API}/api/order/${id}`);
+    return res.data.data.data;
+  } catch (err: any) {
+    console.error("Lỗi xóa đơn hàng!:", err);
+    throw err;
+  }
+};
+
+export const getDashboard = async () => {
+  try {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/dashboard`);
+    return res.data;
+  } catch (err: any) {
+    console.error("Lỗi không lấy được thống kê!:", err);
+    throw err;
+  }
+};

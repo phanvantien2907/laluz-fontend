@@ -9,21 +9,21 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { UserFormData } from "@/hooks/user/useAddNewForm";
 import toast from "react-hot-toast";
-import { useEditForm } from "@/hooks/product/useEditForm";
-import { deleteUser } from "@/lib/api";
+import { deleteOrder } from "@/lib/api";
+import { orderEditForm } from "@/hooks/order/orderEditForm";
+import { OrderFormData } from "@/hooks/order/orderForm";
 
-const DeleteDialog = ({trigger, userID, defaultValues}: {trigger: React.ReactNode, userID: string, defaultValues: UserFormData}) => {
-    const user = deleteUser;
+const DeleteDialog = ({trigger, orderID, defaultValues}: {trigger: React.ReactNode, orderID: string, defaultValues: OrderFormData}) => {
+    const orrder = deleteOrder;
     const handleDelete = async () => {
         try {
-            await user(userID);
-            toast.success("Xóa người dùng thành công!")
+            await orrder(orderID);
+            toast.success("Xóa đơn hàng thành công!")
             return;
         }
         catch (err) {
-            toast.error("Xóa người dùng thất bại!")
+            toast.error("Xóa đơn hàng thất bại!")
             return;
         }
     }
@@ -36,7 +36,7 @@ const DeleteDialog = ({trigger, userID, defaultValues}: {trigger: React.ReactNod
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Bạn chắc chắn muốn xóa người dùng này?</AlertDialogTitle>
+            <AlertDialogTitle>Bạn chắc chắn muốn xóa đơn hàng này?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete your
               account and remove your data from our servers.

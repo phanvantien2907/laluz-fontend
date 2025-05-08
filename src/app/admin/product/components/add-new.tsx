@@ -91,9 +91,19 @@ const AddNew = () => {
                 <Input id="odor_retention" {...register("odor_retention", {required: true})} placeholder='Độ lưu mùi' className="col-span-3" />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="capacity" className="text-right"> Capacity </Label>
-                <Input id="capacity" {...register("capacity", {required: true})} placeholder='Dung tích' className="col-span-3" />
-              </div>
+              <Label htmlFor="capacity" className="text-right">Capacity</Label>
+              <Select onValueChange={(value) => setValue("capacity", value)}>
+                <SelectTrigger className="w-[280px]">
+                <SelectValue placeholder="Dung tích" />
+                </SelectTrigger>
+                <SelectContent>
+                <SelectGroup>
+                <SelectItem value="100ml">100ml</SelectItem>
+                <SelectItem value="50ml">50ml</SelectItem>
+                </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
               <div className="grid grid-cols-4 items-center gap-4">
              <Label htmlFor="image" className="text-right">Image</Label>
             <div className="col-span-3 flex gap-2 items-center">

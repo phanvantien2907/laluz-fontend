@@ -72,9 +72,11 @@ const CheckoutPage = () => {
         last_name: lastName,
         email: email,
         phone: phone,
+        company: company,
         address: {
         street: address,
         city: city,
+        zipcode: zipCode,
         country: selectedCountry,
         },
       };
@@ -87,6 +89,9 @@ const CheckoutPage = () => {
         payment: paymentInfo,
         order_status: "pending",
         products: processedCartItems,
+        zipCode: zipCode,
+        company: company,
+        note: note.trim() || null
       };
       await handleCheckOut(customerInfo);
       const res = await axios.post( `${process.env.NEXT_PUBLIC_SERVER_API}/api/order`, orderData);
@@ -310,20 +315,22 @@ const CheckoutPage = () => {
         </div>
 
         {/* section 2 */}
-        {cartItems.map((item) => (
         <div className="w-full px-4 sm:px-6 md:px-8 order-1 lg:order-2">
-          <div key={item.id} className="flex items-center justify-between border-b border-gray-300 pb-4">
-            <div className="flex items-center gap-3">
-              <Image src={item.image} alt={item.name} width={60} height={60} className="rounded-2xl border-2 border-[#9C8679]"/>
+          {cartItems.map((item) => (
+            <div key={item.id} className="flex items-center justify-between border-b border-gray-300 pb-4 mb-4">
+              <div className="flex items-center gap-3">
+                <Image src={item.image} alt={item.name} width={60} height={60} className="rounded-2xl border-2 border-[#9C8679]"/>
                 <div className='flex flex-col'>
                   <p className='text-[#9C8679] font-bold'>{item.name}</p>
                   <p className='text-sm font-semibold'>Hãng: {item.brand}</p>
                   <p className='text-sm font-semibold'>Giới tính: {item.gender}</p>
                   <p className='text-sm font-semibold'>Lưu hương: {item.odor_retention}</p>
                 </div>
+              </div>
+              <p className="text-red-500 font-bold text-xl">{parsePrice(item.price).toLocaleString("en-US")} <sup>đ</sup> </p>
             </div>
-             <p className="text-red-500 font-bold text-xl">{parsePrice(item.price).toLocaleString("en-US")} <sup>đ</sup> </p>
-          </div>
+          ))}
+          
           <div className="flex justify-between items-center mt-6 border-b border-gray-300 pb-4">
             <h5 className="text-xl font-semibold">Tạm tính</h5>
             <p className="text-[#9C8679] text-lg font-bold ml-auto whitespace-nowrap"> {totalAmount.toLocaleString("en-US")} <sup>đ</sup></p>
@@ -333,7 +340,7 @@ const CheckoutPage = () => {
             {!showCoupon ? (
               <h5
                 className="text-lg font-bold text-red-500 cursor-pointer"
-                onClick={() => setShowCoupon(true)}  >
+                onClick={() => setShowCoupon(true)}>
                 Nhập mã ưu đãi
               </h5>
             ) : (
@@ -354,7 +361,6 @@ const CheckoutPage = () => {
             <p className="text-[#9C8679] text-2xl font-bold"> {totalAmount.toLocaleString("en-US")} <sup>đ</sup></p>
           </div>
         </div>
-         ))}
       </div>
       
     </div>

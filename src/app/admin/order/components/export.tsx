@@ -27,9 +27,9 @@ import toast from 'react-hot-toast';
 import { createUser } from "@/lib/api";
 import { SubmitHandler } from "react-hook-form";
 import { UserFormData, useAddNewForm } from '@/hooks/user/useAddNewForm';
-import { EyeOff, Eye } from 'lucide-react';
+import { EyeOff, Eye, Download } from 'lucide-react';
 
-const AddNew = () => {
+const ExportData = () => {
   const { register, handleSubmit, setValue, watch } = useAddNewForm();
   const [showPassword, setPassword] = useState(false);
   const addUser = createUser;  
@@ -48,7 +48,7 @@ const AddNew = () => {
     <>
        <Dialog>
           <DialogTrigger asChild>
-            <Button variant="outline"><Plus />Add new</Button>
+            <Button variant="outline"><Download />Export</Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
@@ -97,4 +97,4 @@ const AddNew = () => {
   )
 }
 
-export default AddNew
+export default ExportData

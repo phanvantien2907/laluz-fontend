@@ -3,22 +3,12 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { DataTable } from "@/app/admin/user/data-table";
 import { SiteHeader } from "@/components/site-header";
 import { User, columns } from "@/app/admin/user/colums";
+import {user} from "@/lib/api";
 
 async function getUsers(): Promise<User[]> {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/api/user`, {
-      cache: "no-store",});
+  const data = await user();
+  return data.data || [];
 
-    if (!res.ok) {
-      throw new Error(`Failed to fetch users: ${res.status}`);
-    }
-
-    const responseData = await res.json();
-    return responseData.data.data || [];
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    return [];
-  }
 }
 
 export default async function UserManagerPage() {

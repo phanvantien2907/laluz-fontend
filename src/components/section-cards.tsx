@@ -1,5 +1,5 @@
 import { TrendingDownIcon, TrendingUpIcon } from "lucide-react"
-
+import { getDashboard } from "@/lib/api"
 import { Badge } from "@/components/ui/badge"
 import {
   Card,
@@ -8,15 +8,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { useState, useEffect } from "react"
 
 export function SectionCards() {
+  const [data, setData] = useState<any>(null)
+  useEffect(() => {
+    getDashboard().then(setData).catch(() => setData(null))
+  }, []);
+
   return (
     <div className="*:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-4 grid grid-cols-4 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card lg:px-6">
       <Card className="@container/card">
         <CardHeader className="relative">
-          <CardDescription>Total Revenue</CardDescription>
+          <CardDescription>Order Total</CardDescription>
           <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
-            $1,250.00
+            {data ? <> {data.get_total_order?.toLocaleString("en-US")} <span>VNĐ</span> </>  : "..."}
           </CardTitle>
           <div className="absolute right-4 top-4">
             <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
@@ -38,7 +44,7 @@ export function SectionCards() {
         <CardHeader className="relative">
           <CardDescription>New Customers</CardDescription>
           <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
-            1,234
+            {data ? data.new_customer : "..."}
           </CardTitle>
           <div className="absolute right-4 top-4">
             <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
@@ -58,9 +64,9 @@ export function SectionCards() {
       </Card>
       <Card className="@container/card">
         <CardHeader className="relative">
-          <CardDescription>Active Accounts</CardDescription>
+          <CardDescription>Order Count</CardDescription>
           <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
-            45,678
+           {data ? data.total_order : "..."}
           </CardTitle>
           <div className="absolute right-4 top-4">
             <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
@@ -78,9 +84,9 @@ export function SectionCards() {
       </Card>
       <Card className="@container/card">
         <CardHeader className="relative">
-          <CardDescription>Growth Rate</CardDescription>
+          <CardDescription>Order Today</CardDescription>
           <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
-            4.5%
+           {data ? data.order_today : "..."}
           </CardTitle>
           <div className="absolute right-4 top-4">
             <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
@@ -97,5 +103,5 @@ export function SectionCards() {
         </CardFooter>
       </Card>
     </div>
-  )
+  );
 }

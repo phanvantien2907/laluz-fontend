@@ -1,6 +1,6 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal, ArrowUpDown } from "lucide-react";
+import { MoreHorizontal, ArrowUpDown, View } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,13 +12,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { EditForm } from "@/app/admin/user/components/edit";
+import toast from "react-hot-toast";
+import ViewDialog from "@/app/admin/user/components/view";
+import DeleteDialog from "@/app/admin/user/components/delete";
+import LockUserDialog from "@/app/admin/user/components/lock";
 
 export interface User {
   id: string;
+  name: string;
   email: string;
+  password: string;
   is_active: boolean;
-  role?: string;
-  email_verified_at: string | null;
+  role: string;
+  email_verified_at?: Date | null;
 }
 
 export const columns: ColumnDef<User>[] = [
@@ -94,16 +100,45 @@ export const columns: ColumnDef<User>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(user.id)}> Copy ID
+            <DropdownMenuItem className="cursor-pointer"
+              onClick={() => navigator.clipboard.writeText(user.id) .then(() => toast.success("Copy ID thành công!")) .catch(() => toast.error("Lỗi copy ID!"))}> Copy ID
             </DropdownMenuItem >
             <DropdownMenuSeparator />
-            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-            <EditForm trigger={ <span className="flex items-center cursor-pointer">  Edit </span> }  />
+           <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <EditForm
+            trigger={
+            <span className="flex items-center cursor-pointer">Edit</span>}
+            userID={user.id}
+            defaultValues={user}
+             />
              </DropdownMenuItem>
-            <DropdownMenuItem>View</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
-            <DropdownMenuItem>Lock</DropdownMenuItem>
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              <ViewDialog
+              trigger={
+                <span className="flex items-center cursor-pointer">View</span>
+              }
+              userID={user.id}
+              defaultValues={user}
+              />
+            </DropdownMenuItem>
+             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+             <DeleteDialog
+              trigger={
+                <span className="flex items-center cursor-pointer">Delete</span>
+              }
+              userID={user.id}
+              defaultValues={user}
+             />
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+             <LockUserDialog
+              trigger={
+                <span className="flex items-center cursor-pointer">{user.is_active ? "Lock" : "Unlock"}</span>
+              }
+              userID={user.id}
+              defaultValues={user}
+             />
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

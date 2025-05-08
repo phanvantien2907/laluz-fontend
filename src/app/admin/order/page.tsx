@@ -1,17 +1,18 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { SiteHeader } from "@/components/site-header";
-import { Product, columns } from "@/app/admin/product/colums";
-import { DataTable } from "@/app/admin/product/data-table";
-import { product } from "@/lib/api";
+import { Order, columns } from "@/app/admin/order/colums";
+import { order } from "@/lib/api";
+import { DataTable } from "@/app/admin/order/data-table";
 
-async function getProducts(): Promise<Product[]> {
-  const data = await product(true);
+
+async function getOrder(): Promise<Order[]> {
+  const data = await order();
   return data || [];
 }
 
-export default async function ProductManagePage() {
-  const data = await getProducts(); // ✅ Server-side await
+export default async function OrderManagePage() {
+  const data = await getOrder(); // ✅ Server-side await
 
   return (
     <SidebarProvider>
