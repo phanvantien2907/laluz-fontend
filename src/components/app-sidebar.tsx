@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/sidebar"
 import { useMenuAdmin } from "@/hooks/useMenuAdmin"
 import Link from "next/link"
+import { NavMainDynamic } from "@/app/admin/components/navbar-dynamic"
 
 const data = {
   user: {
@@ -176,7 +177,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMainDynamic items={menuData} />
+        {/* <NavMain items={data.navMain} /> */}
         <NavDocuments items={data.documents} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>

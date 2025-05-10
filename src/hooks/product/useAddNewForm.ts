@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 
 export type ProductFormData = {
+  id: string;
   name: string;
   alias: string;
   brand: string;
@@ -17,6 +18,7 @@ export type ProductFormData = {
 export const useAddNewForm = () => {
   return useForm<ProductFormData>({
     defaultValues: {
+      id: "",
       name: "",
       alias: "",
       brand: "",

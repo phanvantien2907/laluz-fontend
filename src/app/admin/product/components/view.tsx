@@ -25,46 +25,50 @@ const { register, watch } = useEditForm(defaultValues);
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Detail product</DialogTitle>
+              <DialogTitle>Product Detail {watch('name')} </DialogTitle>
               <DialogDescription>
                 Make changes to your profile here. Click save when you're done.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right"> Product ID: </Label>
+                <p>{defaultValues.id}</p>
+              </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right"> Name</Label>
-                <Input id="name" {...register("name", {required: true})} placeholder='Tên sản phẩm' className="col-span-3" readOnly />
+              <Label htmlFor="name" className="text-right"> Name: </Label>
+              <p className="whitespace-nowrap">{defaultValues.name}</p>
               </div>
                <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="brand" className="text-right"> Alias </Label>
-                <Input id="brand" {...register("alias")} placeholder='Alias tự động tạo' className="col-span-3" readOnly />
+                <Label htmlFor="brand" className="text-right"> Alias: </Label>
+                <p className="whitespace-nowrap">{defaultValues.alias}</p>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="brand" className="text-right"> Brand </Label>
-                <Input id="brand" {...register("brand", {required: true})} placeholder='Thương hiệu' className="col-span-3" readOnly />
+                <Label htmlFor="brand" className="text-right"> Brand: </Label>
+                <p className="whitespace-nowrap">{defaultValues.brand}</p>
               </div>
                <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="brand" className="text-right"> Price </Label>
-                <Input id="brand" {...register("price", {required: true})} placeholder='Giá tiền' className="col-span-3" readOnly />
+                <Label htmlFor="brand" className="text-right"> Price: </Label>
+                <p className="whitespace-nowrap">{defaultValues.price} <sup>đ</sup></p>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="scent_radiance" className="text-right"> Scent Radiance </Label>
-                <Input id="scent_radiance" {...register("scent_radiance", {required: true})} placeholder='Độ tỏa hương' className="col-span-3" readOnly />
+                <Label htmlFor="scent_radiance" className="text-right"> Scent <div className="mt-1"><p>Radiance:</p></div> </Label>
+                <p className="whitespace-nowrap">{defaultValues.scent_radiance}</p>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="concentration" className="text-right"> Concentration </Label>
-                <Input id="concentration" {...register("concentration", {required: true})} placeholder='Nồng độ' className="col-span-3" readOnly />
+                <Label htmlFor="concentration" className="text-right"> Concentration: </Label>
+                <p className="whitespace-nowrap">{defaultValues.concentration}</p>
               </div>
-               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="odor_retention" className="text-right"> odor_retention </Label>
-                <Input id="odor_retention" {...register("odor_retention", {required: true})} placeholder='Độ lưu mùi' className="col-span-3" readOnly />
+               <div className="grid grid-cols-4 items-center gap-8">
+                <Label htmlFor="odor_retention" className="text-right"> Odor <div className="mt-1"><p>Retention:</p></div> </Label>
+                <p className="whitespace-nowrap">{defaultValues.odor_retention}</p>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="capacity" className="text-right"> Capacity </Label>
-                <Input id="capacity" {...register("capacity", {required: true})} placeholder='Dung tích' className="col-span-3" readOnly />
+                <Label htmlFor="capacity" className="text-right"> Capacity: </Label>
+                <p className="whitespace-nowrap">{defaultValues.capacity}</p>
               </div>
              <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="image" className="text-right">Image</Label>
+            <Label htmlFor="image" className="text-right">Image:</Label>
             <div className="col-span-3 flex gap-2 items-center">
             {watch("image") ? (
             <Image src={watch("image")} alt="Ảnh sản phẩm" width={150} height={150} className="rounded-lg object-cover border"/>
@@ -75,11 +79,11 @@ const { register, watch } = useEditForm(defaultValues);
             </div>       
                <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="gender" className="text-right"> Gender </Label>
-                <Input id="gender" {...register("gender", {required: true})} className="col-span-3" readOnly />
+                <p className="whitespace-nowrap">{defaultValues.gender}</p>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="is_active" className="text-right"> Status </Label>
-                <Input id="is_active" value={watch("is_active") == true ? "Còn hàng": "Hết hàng"} className="col-span-3" readOnly />
+                <p>{defaultValues.is_active ? "Còn hàng" : "Hết hàng"}</p>
               </div>
             </div>
           </DialogContent>

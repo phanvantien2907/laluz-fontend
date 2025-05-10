@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 
 export type ProductFormData = {
+  id: string;
   name: string;
   alias: string;
   brand: string;

@@ -7,7 +7,6 @@ import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { useAdmin } from "@/hooks/useAdmin";
 import data from "./data.json"
-import { use } from "react"
 
 export default function Page() {
  const isAuthorized = useAdmin();

@@ -25,8 +25,7 @@ export default function Adminlayout({ children}: Readonly<{ children: React.Reac
   return (
     <div className="admin-layout">
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <Suspense
-          fallback={<div className="text-center text-2xl">Loading...</div>}  >
+        <Suspense fallback={<div className="text-center text-2xl">Loading...</div>}  >
           <Toaster position="top-right" reverseOrder={false} />
           {children}
         </Suspense>

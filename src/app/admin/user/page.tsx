@@ -4,11 +4,12 @@ import { DataTable } from "@/app/admin/user/data-table";
 import { SiteHeader } from "@/components/site-header";
 import { User, columns } from "@/app/admin/user/colums";
 import {user} from "@/lib/api";
+import { AuthorizedWrapper } from "@/app/admin/components/AuthorizedWrapper";
+
 
 async function getUsers(): Promise<User[]> {
   const data = await user();
   return data.data || [];
-
 }
 
 export default async function UserManagerPage() {
@@ -19,6 +20,7 @@ export default async function UserManagerPage() {
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
+        <AuthorizedWrapper>
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
@@ -26,6 +28,7 @@ export default async function UserManagerPage() {
             </div>
           </div>
         </div>
+        </AuthorizedWrapper>
       </SidebarInset>
     </SidebarProvider>
   );

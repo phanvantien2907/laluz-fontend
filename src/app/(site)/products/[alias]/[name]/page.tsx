@@ -13,7 +13,6 @@ import { useAuth } from '@/context/AuthContext';
 import { CartItem, useCart } from '@/context/CartContext';
 import { toast } from 'react-hot-toast';
 import { useRouter } from "next/navigation";
-import { se } from 'date-fns/locale';
 import { useProduct } from '@/hooks/useProduct';
 import loadingPage from '@/app/(site)/products/[alias]/[name]/loading';
 
@@ -57,8 +56,7 @@ interface BenefitItem {
   
   const resolvedParams = useParams<{ categories: string; alias: string }>();
   if(!data || data.length === 0 ) {
-    // return <div className='text-center'>Loading...</div>;
-    return loadingPage(); // dang fix doan nay
+    return loadingPage();
   }
   const product = data.find((p) => p.alias === resolvedParams .alias);
   

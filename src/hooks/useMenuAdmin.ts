@@ -13,7 +13,7 @@ interface menuItem {
 }
 
 export function useMenuAdmin () {
-const [menuData, setMenuData] = useState<menuItem | null>(null);
+const [menuData, setMenuData] = useState<menuItem[]>([]);
 const [loading, setLoading] = useState(true);
 const [error, setError] = useState<Error | null>(null);
 useEffect(() => {

@@ -77,10 +77,10 @@ export const menu = async () => {
 export const menu_admin = async () => {
   try {
     const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/menu_admin`);
-    return res.data.data;
+    return res.data.data.data;
   } catch (err: any) {
     console.error("Lỗi gọi API:", err);
-    return null;
+    throw err;
   }
 };
 

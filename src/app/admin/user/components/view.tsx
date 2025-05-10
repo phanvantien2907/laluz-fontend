@@ -24,31 +24,31 @@ const { register, watch } = useEditForm(defaultValues);
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Detail user</DialogTitle>
+              <DialogTitle>User Detail {watch('email')} </DialogTitle>
               <DialogDescription>
                 Make changes to your profile here. Click save when you're done.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right"> Name</Label>
-                <Input id="name" {...register("name", {required: true})} placeholder='Name' className="col-span-3" readOnly />
+                <Label htmlFor="name" className="text-right"> Name: </Label>
+                <p className="whitespace-nowrap">{defaultValues.name ? defaultValues.name : "Chưa cập nhật"}</p>
               </div>
                <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="brand" className="text-right"> Email </Label>
-                <Input id="brand" {...register("email")} placeholder='Email' className="col-span-3" readOnly />
+                <Label htmlFor="brand" className="text-right"> Email: </Label>
+                <p>{defaultValues.email}</p>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="role" className="text-right"> Role </Label>
-                <Input id="brand" {...register("role", {required: true})} placeholder='Quyền tài khoản' className="col-span-3" readOnly />
+                <p>{defaultValues.role}</p>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="role" className="text-right"> Email verified </Label>
-                <Input id="email_verified" value={watch("email_verified_at") ? new Date(watch("email_verified_at") as Date).toLocaleDateString("vi-VN") : "Chưa xác minh"} placeholder='Xác minh email' className="col-span-3" readOnly />
+                <Label htmlFor="role" className="text-right whitespace-nowrap"> Email verified: </Label>
+                <p>{defaultValues.email_verified_at ? new Date(watch("email_verified_at") as Date).toLocaleDateString("vi-VN") : "Chưa xác minh"}</p>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="is_active" className="text-right"> Status </Label>
-                <Input id="is_active" value={watch("is_active") == true ? "Đang hoạt động": "Ngừng hoạt động"} className="col-span-3" readOnly />
+               <p className="whitespace-nowrap">{defaultValues.is_active ? "Đang hoạt động" : "Đã khóa"}</p>
               </div>
             </div>
           </DialogContent>
