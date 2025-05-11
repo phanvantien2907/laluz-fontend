@@ -10,15 +10,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { format } from "date-fns"
 import { vi } from 'date-fns/locale'
 import { CalendarIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
 import { FaCircleUser } from "react-icons/fa6"
 import { FaSignOutAlt } from "react-icons/fa"
 import { Calendar } from "@/components/ui/calendar";
 import { AlertDialog, AlertDialogAction,AlertDialogCancel,AlertDialogContent,AlertDialogDescription, AlertDialogFooter, AlertDialogHeader,AlertDialogTitle,AlertDialogTrigger,} from "@/components/ui/alert-dialog";
 import { useProtected } from "@/hooks/use-protected"
 import { useAuth } from '@/context/AuthContext'
+import { editUser } from '@/lib/api'
+import { SubmitHandler } from "react-hook-form";
+import { useEditForm, UserFormData } from "@/hooks/user/useEditForm";
+import toast from 'react-hot-toast'
 
-const ProfilePage = () => {
+const ProfilePage = ({userID, defaultValues}: {userID: string,  defaultValues: UserFormData}) => {
+  const { register, handleSubmit, setValue, watch } = useEditForm(defaultValues);
+  const user = editUser;
   const [avatar, setAvatar] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [date, setDate] = React.useState<Date | undefined>(new Date());
@@ -37,6 +42,17 @@ const ProfilePage = () => {
     fileInputRef.current?.click();
   };
 
+  const handleEdit: SubmitHandler<UserFormData> = async (data) => {
+      try {
+        await user(userID,data);
+        toast.success("Cập nhật thông tin thành công!")
+        return;
+      } catch (err) {
+        toast.error("Cập nhật thông tin thất bại!")
+        return;
+      }
+    }
+
   return (
     <div className="container py-8 max-w-6xl mx-auto">
       <div className="flex flex-col md:flex-row gap-8">
@@ -46,8 +62,7 @@ const ProfilePage = () => {
             <div className="flex flex-col items-center gap-4">
               <div
                 onClick={triggerFileInput}
-                className="relative cursor-pointer group"
-              >
+                className="relative cursor-pointer group">
                 {avatar ? (
                   <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-[#9C8679]">
                     <Image
@@ -78,14 +93,12 @@ const ProfilePage = () => {
             <div className="flex flex-col space-y-3">
               <Link
                 href="/profile"
-                className="text-gray-700 hover:text-[#9C8679] transition-colors py-2 px-4 rounded-lg hover:bg-[#9C8679]/10"
-              >
+                className="text-gray-700 hover:text-[#9C8679] transition-colors py-2 px-4 rounded-lg hover:bg-[#9C8679]/10"  >
                 Thông tin sản phẩm
               </Link>
               <Link
                 href="/profile/orders"
-                className="text-gray-700 hover:text-[#9C8679] transition-colors py-2 px-4 rounded-lg hover:bg-[#9C8679]/10"
-              >
+                className="text-gray-700 hover:text-[#9C8679] transition-colors py-2 px-4 rounded-lg hover:bg-[#9C8679]/10"   >
                 Lịch sử đơn hàng
               </Link>
               <Link
@@ -127,17 +140,18 @@ const ProfilePage = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <form className="space-y-5">
+            <form onSubmit={handleSubmit(handleEdit)} className="space-y-5">
               <div className="grid gap-5">
                 <div className="space-y-2">
                   <Label
                     htmlFor="fullname"
-                    className="font-bold hover:cursor-pointer"
-                  >
+                    className="font-bold hover:cursor-pointer">
                     Họ và tên
                   </Label>
                   <Input
                     id="fullname"
+                    type="text"
+                    {...register('name', { required: true })}
                     placeholder="Nhập họ và tên của bạn"
                     className="rounded-full px-6 focus:ring-2 focus:ring-[#9C8679] hover:cursor-pointer"
                   />
@@ -146,8 +160,7 @@ const ProfilePage = () => {
                 <div className="space-y-2">
                   <Label
                     htmlFor="birthdate"
-                    className="font-bold hover:cursor-pointer"
-                  >
+                    className="font-bold hover:cursor-pointer"  >
                     Ngày sinh
                   </Label>
                   <Popover>
@@ -178,13 +191,13 @@ const ProfilePage = () => {
                 <div className="space-y-2">
                   <Label
                     htmlFor="email"
-                    className="font-bold hover:cursor-pointer"
-                  >
+                    className="font-bold hover:cursor-pointer" >
                     Email
                   </Label>
                   <Input
                     id="email"
                     type="email"
+                    {...register('email', { required: true })}
                     placeholder="example@example.com"
                     className="rounded-full px-6 focus:ring-2 focus:ring-[#9C8679] hover:cursor-pointer"
                   />
@@ -193,8 +206,7 @@ const ProfilePage = () => {
                 <div className="space-y-2">
                   <Label
                     htmlFor="phone"
-                    className="font-bold hover:cursor-pointer"
-                  >
+                    className="font-bold hover:cursor-pointer" >
                     Số điện thoại
                   </Label>
                   <Input
@@ -208,8 +220,7 @@ const ProfilePage = () => {
 
               <Button
                 type="submit"
-                className="group relative bg-[#9C8679] hover:bg-[#8B7868] text-white w-full md:w-auto block rounded-xl px-8 overflow-hidden transition duration-300"
-              >
+                className="group relative bg-[#9C8679] hover:bg-[#8B7868] text-white w-full md:w-auto block rounded-xl px-8 overflow-hidden transition duration-300">
                 <span className="relative z-10 group-hover:text-[#9C8679] transition-colors duration-300">
                   THAY ĐỔI
                 </span>

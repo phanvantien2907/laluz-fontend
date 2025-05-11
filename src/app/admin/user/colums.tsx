@@ -19,6 +19,7 @@ import LockUserDialog from "@/app/admin/user/components/lock";
 
 export interface User {
   id: string;
+  phone: string;
   name: string;
   email: string;
   password: string;

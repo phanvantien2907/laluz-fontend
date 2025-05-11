@@ -3,15 +3,14 @@ import { createContext, useContext, useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { login as loginApi, register } from "@/lib/api";
-import { set } from "date-fns";
-import { de } from "date-fns/locale";
+import { id } from "date-fns/locale";
+
 
 interface AuthContextType {
   isLogin: boolean;
   login: (email: string, password:string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
   logout: () => void;
-  // data: any[];
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
