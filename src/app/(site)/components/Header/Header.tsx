@@ -140,8 +140,8 @@ const  Header = () => {
                           </AlertDialogTitle>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogCancel>Hủy</AlertDialogCancel>
-                          <AlertDialogAction className='bg-black' onClick={logout}>
+                          <AlertDialogCancel className='rounded-2xl'>Hủy</AlertDialogCancel>
+                          <AlertDialogAction className='bg-black rounded-2xl' onClick={logout}>
                             Xác nhận
                           </AlertDialogAction>
                         </AlertDialogFooter>

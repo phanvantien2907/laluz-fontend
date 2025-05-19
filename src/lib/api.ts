@@ -195,3 +195,54 @@ export const getDashboard = async () => {
     throw err;
   }
 };
+
+export const getBlog = async () => {
+  try {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/blog`);
+    return res.data;
+  } catch (err: any) {
+    console.error("Lỗi không lấy được bài viết!:", err);
+    throw err;
+  }
+};
+
+export const getBlogByID = async (id: string) => {
+  try {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_API}/api/blog/${id}`);
+    return res.data.data;
+  } catch (err: any) {
+    console.error("Lỗi không lấy được bài viết!:", err);
+    throw err;
+  }
+};
+
+export const createBlog = async (id: string) => {
+  try {
+    const res = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_API}/api/blog/${id}`);
+    return res.data.data;
+  } catch (err: any) {
+    console.error("Lỗi không tạo được bài viết!:", err);
+    throw err;
+  }
+};
+
+export const editBlog = async (id: string, data: any) => {
+  try {
+    const res = await axios.patch(`${process.env.NEXT_PUBLIC_SERVER_API}/api/blog/${id}`, data);
+    return res.data.data;
+  } catch (err: any) {
+    console.error("Lỗi không sửa được bài viết!:", err);
+    throw err;
+  }
+};
+
+export const deleteBlog = async (id: string) => {
+  try {
+    const res = await axios.delete(`${process.env.NEXT_PUBLIC_SERVER_API}/api/blog/${id}`);
+    return res.data.data;
+  } catch (err: any) {
+    console.error("Lỗi không xóa được bài viết!:", err);
+    throw err;
+  }
+};
+
